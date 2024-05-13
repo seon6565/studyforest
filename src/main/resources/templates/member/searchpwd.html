@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{common/common.html}">
+
+<div class="container my-3" layout:fragment="content">
+    <div class="card">
+        <div class="card-body p-4">
+            <header class="py-1">
+                <div class="container px-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 col-xxl-6">
+                            <div class="text-center my-3">
+                                <h1 class="fw-bolder mb-3">비밀번호 찾기</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <form id="frmSearchpwd" name="frmSearchpwd" method="post" action="/member/searchpwd">
+                <div class="mb-3">
+                    <h2>패스워드를 잊으셨나요?</h2>
+                    <p>본인 인증을 진행하기 위해 아이디를 입력해주세요.</p>
+                </div>
+                <div class="mb-3">
+                    <label for="user_id" class="form-label">아이디</label>
+                    <input type="text" class="form-control" name="user_id" id="user_id" maxlength="20">
+                </div>
+                <div class="mb-3">
+                    <p>※ 아이디 입력후임시비밀번호발송버튼을눌러주세요.</p>
+                    <p>※ 가입하신 이메일주소로 임시비밀번호가 발송됩니다.
+                    메일서비스에 따라 다소 시간이 걸릴수있습니다.</p>
+                    <p>※ 임시비밀번호는발송후, 1시간내에만유효합니다.</p>
+                </div>
+                <div class="d-grid gap-2 d-md-block">
+                    <button class="btn btn-primary" id="searchbtn" >비밀번호 찾기</button>
+                    <button type="button" class="btn btn-primary" id="btnLogin" onclick="history.back()">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script layout:fragment="script" th:inline="javascript">
+
+</script>
+
