@@ -42,13 +42,14 @@
                     </div>
                 </div>
                 <div class="d-grid gap-2">
-                    <button class="btn btn-primary" id="btnLogin" disabled>로그인</button>
+                    <button type="submit" class="btn btn-primary" id="btnLogin" disabled>로그인</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<script layout:fragment="script" th:inline="javascript">
+
+<script layout:fragment="script" th:inline="javascript" th:text="${errorAlert}">
 
 </script>
 

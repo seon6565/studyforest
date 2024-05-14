@@ -1,18 +1,4 @@
-function checkloginpw(checkid, btnid,errid) {
-    let Check = document.getElementById(checkid);
-    let Char = Check.value;
-    let btn = document.getElementById(btnid);
-    let err = document.getElementById(errid);
-    console.log(err);
-    const regex = /^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{10,16}$/;
-    if (regex.test(Char)) {
-        err.style.display = "none";
-        btn.disabled = false;
-    } else {
-        err.style.display = "block";
-        btn.disabled = true;
-    }
-}
+
 function checkloginid(checkid,btnid,errid) {
     let Check = document.getElementById(checkid);
     let Char = Check.value;
@@ -28,14 +14,29 @@ function checkloginid(checkid,btnid,errid) {
         btn.disabled = true;
     }
 }
+function checkloginpw(checkid, btnid,errid) {
+    let Check = document.getElementById(checkid);
+    let Char = Check.value;
+    let btn = document.getElementById(btnid);
+    let err = document.getElementById(errid);
+    console.log(err);
+    const regex = /^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/;
+    if (regex.test(Char)) {
+        err.style.display = "none";
+        btn.disabled = false;
+    } else {
+        err.style.display = "block";
+        btn.disabled = true;
+    }
+}
 
 function checkloginall(frmid, userid, pwdid){
 
     const frm = document.getElementById("frmid");
     const iddom = document.getElementById("userid");
     const pwddom = document.getElementById("pwdid");
-    e.preventDefault();
-    e.stopPropagation();
+    frm.preventDefault();
+    frm.stopPropagation();
     id = iddom.value;
     pwd = pwddom.value;
         const regex = /^[a-z0-9]{4,15}$/;

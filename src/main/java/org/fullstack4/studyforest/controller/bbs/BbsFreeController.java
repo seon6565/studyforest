@@ -21,7 +21,7 @@ import java.util.Map;
 public class BbsFreeController {
     @Autowired
     private BbsRepository bbsRepository;
-    @GetMapping("/bbs/list/{category}")
+    @GetMapping("/bbs/{category}/list")
     @ResponseBody
     public Map<String, Object> list(@PathVariable String category){
         PageRequest pageable = PageRequest.of(0,30, Sort.by("bbsIdx").descending());

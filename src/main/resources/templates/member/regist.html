@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
       layout:decorate="~{common/common.html}">
+<script layout:fragment="script" th:inline="javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
 <div layout:fragment="content">
     <div class="container">
@@ -18,40 +19,62 @@
         </header>
         <div class="card">
             <div class="card-body p-4">
-                <form name="frmRegist" id="frmRegist" method="post" action="/member/join" onsubmit="checklast('user_id','div_err_user_id','pwd','div_err_pwd','name','div_err_name','email','div_err_email','phone_number','div_err_phone_number','birthday','div_err_birthday','okflagid','addr_number','div_err_addr_number','addr1','div_err_addr1','addr2','div_err_addr2')">
+                <form name="frmRegist" id="frmRegist" method="post" action="/member/regist"
+                      onsubmit="checklast('userId','div_err_userId','password','div_err_password','name','div_err_name','email','div_err_email','phone','div_err_phone','birthday','div_err_birthday','okflagid','addr_number','div_err_addr_number','addr1','div_err_addr1','addr2','div_err_addr2')">
                     <div class="mb-3">
-                        <label for="user_id" class="form-label">아이디</label>
-                        <input type="text" class="form-control col-auto" name="user_id" id="user_id" value="${memberDTO.user_id}" onkeyup="checkInputId('user_id','div_err_user_id','okflagid')" maxlength="20">
-                        <button class="btn btn-primary col-auto" type="button" id="idcheck" onclick="idduplecheck('user_id','div_err_duple_id','okflagid','/member/duplecheck')" >중복확인</button>
+                        <label for="userId" class="form-label">아이디</label>
+                        <input type="text" class="form-control col-auto" name="userId" id="userId" onkeyup="checkInputId('userId','div_err_userId','okflagid')" maxlength="20">
+                        <button class="btn btn-primary col-auto" type="button" id="idcheck" onclick="idduplecheck('userId','div_err_duple_id','okflagid','/member/duplecheck')" >중복확인</button>
                         <input type="hidden" value="0" id="okflagid" name="okflagid">
                         <div class="form-text" id="div_err_duple_id" style="display:none; color:red">중복된 아이디가 존재합니다.</div>
-                        <div class="form-text" id="div_err_user_id" style="display:none; color:red">4~15자내의 숫자,영어만 입력하세요.</div>
+                        <div class="form-text" id="div_err_userId" style="display:none; color:red">4~15자내의 숫자,영어만 입력하세요.</div>
                     </div>
                     <div class="mb-3">
-                        <label for="pwd" class="form-label">비밀번호</label>
-                        <input type="password" class="form-control" name="pwd" id="pwd" value="${memberDTO.pwd}" onkeyup="checkInputPw('pwd','div_err_pwd')" maxlength="128">
-                        <div class="form-text" id="div_err_pwd" style="display:none; color:red">영문+숫자+특수문자 8~20자리로만 입력하세요.</div>
+                        <label for="password" class="form-label">비밀번호</label>
+                        <input type="password" class="form-control" name="password" id="password" onkeyup="checkInputPw('password','div_err_password')" maxlength="128">
+                        <div class="form-text" id="div_err_password" style="display:none; color:red">영문+숫자+특수문자 8~20자리로만 입력하세요.</div>
                     </div>
                     <div class="mb-3">
                         <label for="pwd2" class="form-label">비밀번호</label>
-                        <input type="password" class="form-control" name="pwd2" id="pwd2" value="${memberDTO.pwd}" onkeyup="checkInputPw2('pwd2','div_err_pwd2')" maxlength="128">
-                        <div class="form-text" id="div_err_pwd2" style="display:none; color:red">영문+숫자+특수문자 8~20자리로만 입력하세요.</div>
+                        <input type="password" class="form-control" name="pwd2" id="pwd2"  onkeyup="checkInputPw2('password','pwd2','div_err_pwd2')" maxlength="128">
+                        <div class="form-text" id="div_err_pwd2" style="display:none; color:red">비밀번호가 일치하지 않습니다.</div>
                     </div>
                     <div class="mb-3">
                         <label for="name" class="form-label">이름</label>
-                        <input type="text" class="form-control" name="name" id="name" value="${memberDTO.name}" onkeyup="checkInputName('name','div_err_name')" maxlength="20">
+                        <input type="text" class="form-control" name="name" id="name"  onkeyup="checkInputName('name','div_err_name')" maxlength="20">
                         <div class="form-text" id="div_err_name" style="display:none; color:red">한글 5자이내, 영문10자이내 로만 입력하세요</div>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">이메일</label>
-                        <input type="email" class="form-control" name="email" id="email" value="${memberDTO.email}" onkeyup="checkInputEmail('email','div_err_email')" maxlength="30">
+                        <input type="email" class="form-control" name="email" id="email"  onkeyup="checkInputEmail('email','div_err_email')" maxlength="30">
                         <div class="form-text" id="div_err_email" style="display:none; color:red">OOO@OOO.OOO형태로 입력해주세요.</div>
                     </div>
                     <div class="mb-3">
-                        <label for="phone_number" class="form-label">휴대폰번호</label>
-                        <input type="tel" class="form-control" name="phone_number" id="phone_number" value="${memberDTO.phone_number}" onkeyup="checkInputPhone('phone_number','div_err_phone_number')" maxlength="20">
-                        <div class="form-text" id="div_err_phone_number" style="display:none; color:red">OOO-OOOO-OOOO형태로 입력해주세요.</div>
+                        <label for="phone" class="form-label">휴대폰번호</label>
+                        <input type="tel" class="form-control" name="phone" id="phone"  onkeyup="checkInputPhone('phone','div_err_phone')" maxlength="20">
+                        <div class="form-text" id="div_err_phone" style="display:none; color:red">OOO-OOOO-OOOO형태로 입력해주세요.</div>
                     </div>
+                    <div class="mb-3">
+                        <label for="birthday" class="form-label">생년월일</label>
+                        <input type="date" class="form-control" name="birthday" id="birthday" onchange="checkInputBirth('birthday','div_err_birthday')"maxlength="20">
+                        <div class="form-text" id="div_err_birthday" style="display:none; color:red">오늘까지의 날짜로만 입력 가능합니다.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addr_number" class="form-label">우편번호</label>
+                        <input type="text" class="form-control" name="addr_number" id="addr_number" onclick="addressSearch()" readonly>
+                        <div class="form-text" id="div_err_addr_number" style="display:none; color:red">우편번호 5자리숫자를 입력해 주세요.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addr1" class="form-label">주소</label>
+                        <input type="text" class="form-control" name="addr1" id="addr1"  onclick="addressSearch()" readonly >
+                        <div class="form-text" id="div_err_addr1" style="display:none; color:red">값을 입력해 주세요.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addr2" class="form-label">상세주소</label>
+                        <input type="text" class="form-control" name="addr2" id="addr2"  onkeyup="checkInputCommon('addr2','div_err_addr2')" maxlength="50">
+                        <div class="form-text" id="div_err_addr2" style="display:none; color:red">값을 입력해 주세요.</div>
+                    </div>
+
                     <div class="d-grid gap-2">
                         <button class="btn btn-primary" type="submit">회원가입</button>
                     </div>
@@ -61,5 +84,3 @@
     </div>
 </div>
 
-<script layout:fragment="script" th:inline="javascript">
-</script>

@@ -9,6 +9,8 @@
     <script src="/js/bbslist.js"></script>
     <script src="/js/loginvaluecheck.js"></script>
     <script src="/js/kakaoapi.js"></script>
+
+
     <title>Layout</title>
 </head>
 <body>
@@ -22,20 +24,13 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a href="/list" class="nav-link link-secondary">자유게시판</a></li>
-                <th:if test="${memberDTO !=null}">
-                    <li class="nav-item"><a th:href="@{/member/mypage(user_id='user_id')}" class="nav-link link-secondary">${user_id}</a></li>
-                </th:if>
-                <th:if test="${memberDTO ==null}">
-                    <li class="nav-item"><a href="/member/regist" class="nav-link link-secondary">회원가입</a></li>
-                </th:if>
-                <th:if test="${memberDTO !=null}">
-                    <li class="nav-item"><a href="/logout" class="nav-link link-secondary">로그아웃</a></li>
-                </th:if>
-                <th:if test="${memberDTO ==null}">
-                    <li class="nav-item"><a href="/login" class="nav-link link-secondary">로그인</a></li>
-                </th:if>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a href="bbs/list" class="nav-link link-secondary">자유게시판</a></li>
+                    <li th:if="${session.memberDTO}" class="nav-item"><a th:href="@{/member/mypage(userId='user_id')}" class="nav-link link-secondary">${session.memberDTO.user_id}</a>
+                </li>
+                    <li th:if="${session.memberDTO == null}" class="nav-item"><a href="/member/regist" class="nav-link link-secondary">회원가입</a></li>
+                    <li th:if="${session.memberDTO}" class="nav-item"><a href="/logout" class="nav-link link-secondary">로그아웃</a></li>
+                    <li th:if="${session.memberDTO == null}" class="nav-item"><a href="/login" class="nav-link link-secondary">로그인</a></li>
             </ul>
         </div>
     </div>

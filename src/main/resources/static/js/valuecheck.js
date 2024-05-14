@@ -15,25 +15,6 @@ function checkInputCommon(id,textid){
     return true;
 }
 
-function checkInputAddrNumber(id,textid){
-    let Check = document.getElementById(id);
-    let Char = Check.value;
-    let text = document.getElementById(textid);
-    let now = Date.now();
-    let input = new Date(Char)
-    const regex = /^[0-9]{5}$/;
-    if(regex.test(Char)){
-        text.style.display = "none";
-    }
-    else{
-        text.style.display = "block";
-        Check.focus();
-        return false;
-        event.preventDefault();
-    }
-    return true;
-}
-
 function checkInputId(id,textid,okflagid){
 
     document.getElementById(okflagid).value="0";
@@ -43,7 +24,7 @@ function checkInputId(id,textid,okflagid){
         Char = Check.value;
     }
     let text = document.getElementById(textid);
-    const regex = /^[A-Za-z0-9]{5,15}$/;
+    const regex = /^[a-z0-9]{4,15}$/;
     if(regex.test(Char)){
         text.style.display = "none";
     }
@@ -82,7 +63,7 @@ function checkInputPw(id, textid) {
     let Check = document.getElementById(id);
     let Char = Check.value;
     let text = document.getElementById(textid);
-    const regex = /^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{10,16}$/;
+    const regex = /^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/;
     if (regex.test(Char)) {
         text.style.display = "none";
     } else {
@@ -100,8 +81,7 @@ function checkInputPw2(id, id2, textid) {
     let Char = Check.value;
     let Char2 = Check2.value;
     let text = document.getElementById(textid);
-    const regex = /^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{10,16}$/
-    if(regex.test(Char2)&& Char==Char2){
+    if(Char==Char2){
         text.style.display = "none";
     }
     else{
@@ -224,6 +204,24 @@ function checkInputEmail(id,textid){
     return true;
 }
 
+function checkInputAddrNumber(id,textid){
+    let Check = document.getElementById(id);
+    let Char = Check.value;
+    let text = document.getElementById(textid);
+    let now = Date.now();
+    let input = new Date(Char)
+    const regex = /^[0-9]{5}$/;
+    if(regex.test(Char)){
+        text.style.display = "none";
+    }
+    else{
+        text.style.display = "block";
+        Check.focus();
+        return false;
+        event.preventDefault();
+    }
+    return true;
+}
 
 function checkInputInterest(id,id2,textid){
     let Check = document.getElementById(id);

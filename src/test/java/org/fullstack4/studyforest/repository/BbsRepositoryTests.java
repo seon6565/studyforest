@@ -22,17 +22,17 @@ public class BbsRepositoryTests {
 
     @Test
     public void  testRegist(){
-        log.info("testRegist : ");
-        IntStream.rangeClosed(0,10).forEach(i->{
-            BbsFreeEntity bbs = BbsFreeEntity.builder()
-                    .user_id("test")
-                    .title("테스트 제목 "+i)
-                    .content("테스트 본문 "+i)
-                    //display_date(new SimpleDateFormat("yyyy-MM-dd").format(new Date(2024-1900,4,(i%10==0?1:i%10))).toString())
-                    .build();
-            BbsFreeEntity bbsResult = bbsRepository.save(bbs);
-            log.info("testRegist Result : "+ bbsResult);
-        });
+//        log.info("testRegist : ");
+//        IntStream.rangeClosed(0,10).forEach(i->{
+//            BbsFreeEntity bbs = BbsFreeEntity.builder()
+//                    .user_id("test")
+//                    .title("테스트 제목 "+i)
+//                    .content("테스트 본문 "+i)
+//                    //display_date(new SimpleDateFormat("yyyy-MM-dd").format(new Date(2024-1900,4,(i%10==0?1:i%10))).toString())
+//                    .build();
+//            BbsFreeEntity bbsResult = bbsRepository.save(bbs);
+//            log.info("testRegist Result : "+ bbsResult);
+//        });
     }
 
     @Test
