@@ -56,7 +56,8 @@ public class LoginController {
                             @RequestParam(name="acc_url", defaultValue = "/", required = false) String acc_url,
                             HttpServletRequest req,
                             Model model,
-                            HttpServletResponse response){
+                            HttpServletResponse response,
+                            RedirectAttributes redirectAttributes){
         String save_id = null;
         String auto_login = null;
         loginDTO.setPwd(commonUtil.encryptPwd(loginDTO.getPwd()));
@@ -68,6 +69,10 @@ public class LoginController {
 //            throw new RuntimeException(e);
 //        }
         if(LoginMemberDTO !=null){
+            if(LoginMemberDTO.getState().equals("N")){
+                redirectAttributes.addFlashAttribute("info","alert(`탈퇴한 계정입니다.`);");
+                return "redirect:/login";
+            }
             HttpSession session = req.getSession();
             if(loginDTO.getSave_id()!=null){
                 save_id=loginDTO.getUser_id();
@@ -92,18 +97,19 @@ public class LoginController {
                 response.addCookie(cookie4);
             }
             session.setAttribute("memberDTO",LoginMemberDTO);
+            redirectAttributes.addFlashAttribute("info","alert(`로그인 성공`);");
             if(req.getServletPath().equals("/login")){
                 return "redirect:/";
             }
             return "redirect:"+uri;
         }
         model.addAttribute("acc_url", uri);
-        model.addAttribute("error","alert(`로그인 실패`);");
+        model.addAttribute("info","alert(`로그인 실패`);");
         return "/login";
     }
 
     @RequestMapping("/logout")
-    public String logout(HttpServletRequest req, HttpServletResponse response){
+    public String logout(HttpServletRequest req, HttpServletResponse response, RedirectAttributes redirectAttributes){
         HttpSession session = req.getSession(false);
         if(session!=null) {
             session.invalidate();
@@ -135,7 +141,7 @@ public class LoginController {
                 response.addCookie(cookie4);
             }
         }
-
+        redirectAttributes.addFlashAttribute("info","alert(`로그아웃 완료`);");
         return "redirect:/";
     }
 
@@ -149,7 +155,6 @@ public class LoginController {
                 for (Cookie cookie : cookies) {
                     if (cookie.getName().equals("auto_login")) {
                         session.setAttribute("memberDTO", loginServiceIf.cookieLogin(cookie.getValue()));
-
                         return "redirect:" + uri;
                     }
                 }

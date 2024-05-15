@@ -27,25 +27,22 @@ public class MemberController {
     private final MemberServiceIf memberServiceIf;
     private final CommonUtil commonUtil;
     @GetMapping("/view")
-    public void view(@RequestParam(name="member_idx", defaultValue = "0") int member_idx, Model model){
-        MemberDTO memberDTO = memberServiceIf.view(member_idx);
-        model.addAttribute("memberDTO",memberDTO);
+    public void view(){
     }
     @GetMapping("/regist")
     public void registGET(){
     }
     @PostMapping("/regist")
-    public String registPOST(@Valid MemberDTO memberDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+    public String registPOST(@Valid MemberDTO memberDTO, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
         memberDTO.setPassword(commonUtil.encryptPwd(memberDTO.getPassword()));
-        log.info("memberDTO : " + memberDTO);
         if(bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
-            redirectAttributes.addFlashAttribute("memberDTO",memberDTO);
-            return "redirect:/member/regist";
+            model.addAttribute("errors",bindingResult.getAllErrors());
+            model.addAttribute("memberDTO",memberDTO);
+            return "/member/regist";
         }
-
         int result = memberServiceIf.regist(memberDTO);
         if(result > 0 ){
+            redirectAttributes.addFlashAttribute("info","alert(`가입이 완료되었습니다.`);");
             return "redirect:/login";
         }
         else{
@@ -55,7 +52,6 @@ public class MemberController {
     @GetMapping("/duplecheck")
     public void duplecheckGET(HttpServletRequest request, HttpServletResponse response){
         String user_id = request.getParameter("user_id");
-        log.info("user_id=" +user_id);
         int count = 0;
         if(memberServiceIf.idCheck(user_id) >0){
             count = memberServiceIf.idCheck(user_id);
@@ -76,33 +72,63 @@ public class MemberController {
         }
     }
     @GetMapping("/modify")
-    public void modifyGET(@RequestParam(name="member_idx", defaultValue = "") int member_idx, Model model){
-        log.info("============================");
-        log.info("MemberController modifyGET");
-        log.info("============================");
-        MemberDTO memberDTO = memberServiceIf.view(member_idx);
-        model.addAttribute("memberDTO",memberDTO);
+    public void modifyGET(){
     }
     @PostMapping("/modify")
-    public String modifyPOST(MemberDTO memberDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
-        log.info("============================");
-        log.info("MemberController modifyPOST");
-        log.info("============================");
-        memberDTO.setPassword(commonUtil.encryptPwd(memberDTO.getPassword()));
+    public String modifyPOST(@Valid MemberDTO memberDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes,HttpServletRequest request){
         if(bindingResult.hasErrors()){
             log.info("bindingResult Errors : " +memberDTO);
             redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
-            redirectAttributes.addFlashAttribute("memberDTO",memberDTO);
-            redirectAttributes.addAttribute("member_idx",memberDTO.getMember_idx());
+            redirectAttributes.addFlashAttribute("info","alert(`회원 정보 수정 실패 올바른 값을 입력해 주세요.`);");
             return "redirect:/member/modify";
         }
-        memberServiceIf.modify(memberDTO);
-        return "redirect:/member/view?member_idx="+memberDTO.getMember_idx();
+        MemberDTO modifyDTO = memberServiceIf.modify(memberDTO);
+        request.getSession().setAttribute("memberDTO",modifyDTO);
+        redirectAttributes.addFlashAttribute("info","alert(`회원 정보 수정 성공`);");
+        return "redirect:/member/view";
     }
-    @PostMapping("/delete")
-    public String deletePOST(int member_idx, HttpServletRequest request){
-        memberServiceIf.delete(member_idx);
-        request.getSession().invalidate();
+    @GetMapping("/modifypwd")
+    public void modifyPwdGET(){
+    }
+    @PostMapping("/modifypwd")
+    public String modifyPwdPOST(MemberDTO memberDTO, RedirectAttributes redirectAttributes, HttpServletRequest request){
+        if(!memberDTO.getPassword().matches("^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$")){
+            redirectAttributes.addFlashAttribute("info","alert(`비밀번호를 조건에 맞게 입력해주세요.`);");
+            return "redirect:/member/modifypwd";
+        }
+        memberDTO.setPassword(commonUtil.encryptPwd(memberDTO.getPassword()));
+        memberDTO.setTemp_password(commonUtil.encryptPwd(memberDTO.getTemp_password()));
+
+        MemberDTO modifyDTO = memberServiceIf.modifyPassword(memberDTO);
+        request.getSession().setAttribute("memberDTO",modifyDTO);
+        redirectAttributes.addFlashAttribute("info","alert(`비밀번호 변경 성공`);");
+        return "redirect:/member/view";
+    }
+
+    @GetMapping("/pwdcheck")
+    public void pwdcheckGET(HttpServletRequest request, HttpServletResponse response){
+        MemberDTO memberDTO = (MemberDTO) request.getSession().getAttribute("memberDTO");
+        String pwd =memberDTO.getPassword();
+        String tempPwd = commonUtil.encryptPwd(request.getParameter("temp_password"));
+        if(pwd.equals(tempPwd)){
+            try {
+                response.getWriter().print("Y");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }else {
+            try {
+                response.getWriter().print("N");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @GetMapping("/leave")
+    public String deletePOST(HttpServletRequest request){
+        MemberDTO memberDTO = (MemberDTO) request.getSession().getAttribute("memberDTO");
+        memberServiceIf.leave(memberDTO.getMember_idx());
         return "redirect:/logout";
     }
 
@@ -117,10 +143,6 @@ public class MemberController {
         return "redirect:/member/changepwd";
     }
 
-    @GetMapping("/changepwd")
-    public void changepwd(){
-
-    }
     @GetMapping("/mypage")
     public void mypage(){
 

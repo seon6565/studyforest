@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{common/common.html}">
+
+<div layout:fragment="content">
+    <div class="container">
+        <header class="py-3">
+            <div class="container px-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-xxl-6">
+                        <div class="text-center my-5">
+                            <h1 class="fw-bolder mb-3">비밀번호 변경</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="card">
+            <div class="card-body p-4">
+                <form name="frmchangepwd" id="frmchangepwd" method="post" action="/member/modifypwd" onsubmit="checkLastModifyPwd('password','div_err_pwd','pwd2','div_err_pwd2')">
+                    <input type="hidden" id="member_idx" name="member_idx" th:value="${session.memberDTO.member_idx}">
+                    <div class="mb-3">
+                        <label for="temp_password" class="form-label">현재 비밀번호</label>
+                        <input type="password" class="form-control" name="temp_password" id="temp_password" onkeyup="checkInputCommon('temp_password','div_err_temp_password')" maxlength="20">
+                        <button class="btn btn-primary col-auto" type="button" id="pwdcheck" onclick="pwdCheck('temp_password','div_err_check_pwd','/member/pwdcheck','pwdchangebtn')" >비밀번호 확인</button>
+                        <div class="form-text" id="div_err_check_pwd" style="display:none; color:red">비밀번호가 일치하지 않습니다.</div>
+                        <div class="form-text" id="div_err_temp_password" style="display:none; color:red">현재 비밀번호를 입력해 주세요.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">변경할 비밀번호</label>
+                        <input type="password" class="form-control" name="password" id="password" onkeyup="checkInputPw('password','div_err_pwd')" maxlength="20">
+                        <div class="form-text" id="div_err_pwd" style="display:none; color:red">영문+숫자+특수문자 8~20자리로만 입력하세요.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pwd2" class="form-label">변경할 비밀번호 재 확인</label>
+                        <input type="password" class="form-control" name="pwd2" id="pwd2" onkeyup="checkInputPw2('password','pwd2','div_err_pwd2')" maxlength="20">
+                        <div class="form-text" id="div_err_pwd2" style="display:none; color:red">비밀번화 일치하지 않습니다.</div>
+                    </div>
+                    <div class="d-grid gap-2 d-md-block">
+                        <button class="btn btn-primary" id="pwdchangebtn" type="submit" disabled>확인</button>
+                        <button type="button" class="btn btn-primary" id="btnview" onclick="window.location.href='/member/view'">취소</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+</script>

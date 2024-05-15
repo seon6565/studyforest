@@ -11,10 +11,7 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
 
-//    public Optional<MemberEntity> findByUser_id(String user_id);
     public Optional<MemberEntity> findByUserId(String userId);
 
-//    @Query(value = "select count from sf_member where user_id=%:user_id%", nativeQuery = true)
-//    public int idCheck(String user_id);
 
 }

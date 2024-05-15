@@ -27,7 +27,7 @@
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a href="/" class="nav-link link-secondary">전체게시판</a></li>
                 <li th:if="${session.memberDTO}" class="nav-item">
-                    <a th:href="@{/member/view(member_idx=${session.memberDTO.member_idx})}" class="nav-link link-secondary">[[${session.memberDTO.userId}]]님 환영합니다.</a>
+                    <a th:href="@{/member/view}" class="nav-link link-secondary">[[${session.memberDTO.userId}]]님 환영합니다.</a>
                 </li>
                 <li th:if="${session.memberDTO == null}" class="nav-item"><a href="/member/regist" class="nav-link link-secondary">회원가입</a></li>
                 <li th:if="${session.memberDTO}" class="nav-item"><a href="/logout" class="nav-link link-secondary">로그아웃</a></li>
@@ -65,7 +65,8 @@
         </ul>
     </footer>
 </div>
-<script>[[${error}]]</script>
+<script>[[${info}]]</script>
+<script>[[${errors}]]</script>
 <script layout:fragment="script" th:inline="javascript">
 
 </script>

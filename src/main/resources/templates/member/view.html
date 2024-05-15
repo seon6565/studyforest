@@ -61,7 +61,7 @@
                 </div>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button class="btn btn-outline-primary" type="button" onclick="location.href='/member/modify'">회원정보수정</button>
-                    <button class="btn btn-outline-primary" type="button" onclick="location.href='/member/delete'">탈퇴하기</button>
+                    <button class="btn btn-outline-primary" type="button" onclick="goDelete()">탈퇴하기</button>
                 </div>
             </div>
         </div>
@@ -69,9 +69,9 @@
 
 <script layout:fragment="script" th:inline="javascript">
     function goDelete(){
-        const frm = document.getElementById("frmDelete");
         if(confirm("회원탈퇴를 하시겠습니까?")){
-            frm.submit();
+            alert("탈퇴가 완료되었습니다.");
+            location.href='/member/leave';
         }
     }
 </script>

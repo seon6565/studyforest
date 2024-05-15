@@ -1,6 +1,6 @@
 package org.fullstack4.studyforest.dto;
 
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
@@ -18,29 +18,32 @@ import java.time.LocalDateTime;
 @Builder
 public class MemberDTO {
     private int member_idx;
+    @NotEmpty
     @Pattern(regexp = "^[A-Za-z0-9]{4,15}$")
     private String userId;
+    @NotEmpty
     @Pattern(regexp = "^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$")
     private String password;
+    @NotEmpty
     @Pattern(regexp = "^[가-힣A-Za-z]{1,10}$")
     private String name;
 
     @Builder.Default
     private String roles = "user";
+    @NotEmpty
     @Pattern(regexp = "\\w+@\\w+\\.\\w+(\\.\\w+)?")
     private String email;
-//    @Pattern(regexp = "\\d{2,3}-\\d{3,4}-\\d{4}")
-//    private String phone;
+    @NotEmpty
     @Pattern(regexp = "\\d{2,3}-\\d{3,4}-\\d{4}")
     private String phone;
     @NotNull
     @PastOrPresent
     private LocalDate birthday;
-    @NotNull
+    @NotEmpty
     private String addr1;
-    @NotNull
+    @NotEmpty
     private String addr2;
-    @NotNull
+    @NotEmpty
     private String addr_number;
 
 

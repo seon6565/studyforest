@@ -38,7 +38,7 @@ public class MemberServiceImpl implements MemberServiceIf{
     }
 
     @Override
-    public void modify(MemberDTO memberDTO) {
+    public MemberDTO modify(MemberDTO memberDTO) {
         Optional<MemberEntity> result = memberRepository.findById(memberDTO.getMember_idx());
         MemberEntity memberEntity = result.orElse(null);
         if(memberEntity!=null) {
@@ -49,23 +49,34 @@ public class MemberServiceImpl implements MemberServiceIf{
                     memberDTO.getAddr1(),
                     memberDTO.getAddr2(),
                     memberDTO.getAddr_number());
+            memberRepository.save(memberEntity);
         }
+        memberDTO = modelMapper.map(memberEntity,MemberDTO.class);
+        return memberDTO;
     }
 
     @Override
-    public void modifyPassword(MemberDTO memberDTO) {
+    public MemberDTO modifyPassword(MemberDTO memberDTO) {
         Optional<MemberEntity> result = memberRepository.findById(memberDTO.getMember_idx());
         MemberEntity memberEntity = result.orElse(null);
-        if(memberEntity!=null) {
+        if(memberEntity!=null&& memberEntity.getPassword().equals(memberDTO.getTemp_password())) {
             memberEntity.modifyPassword(
                     memberDTO.getPassword()
             );
+            memberRepository.save(memberEntity);
         }
+        memberDTO = modelMapper.map(memberEntity,MemberDTO.class);
+        return memberDTO;
     }
 
     @Override
-    public void delete(int idx) {
-        memberRepository.deleteById(idx);
+    public void leave(int idx) {
+        Optional<MemberEntity> result = memberRepository.findById(idx);
+        MemberEntity memberEntity = result.orElse(null);
+        if(memberEntity!=null) {
+            memberEntity.leave();
+            memberRepository.save(memberEntity);
+        }
     }
 
     @Override

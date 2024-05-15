@@ -4,7 +4,6 @@ function checkloginid(checkid,btnid,errid) {
     let Char = Check.value;
     let btn = document.getElementById(btnid);
     let err = document.getElementById(errid);
-    console.log(err);
     const regex = /^[a-z0-9]{4,15}$/;
     if (regex.test(Char)) {
         err.style.display = "none";
@@ -19,7 +18,6 @@ function checkloginpw(checkid, btnid,errid) {
     let Char = Check.value;
     let btn = document.getElementById(btnid);
     let err = document.getElementById(errid);
-    console.log(err);
     const regex = /^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$/;
     if (regex.test(Char)) {
         err.style.display = "none";

@@ -2,7 +2,7 @@ function checkInputCommon(id,textid){
     let Check = document.getElementById(id);
     let Char = Check.value;
     let text = document.getElementById(textid);
-    const regex = /^[가-힣a-zA-Z0-9\s]{1,50}$/;
+    const regex = /^[가-힣a-zA-Z0-9\s#?!@$%^&*-]{1,50}$/;
     if(regex.test(Char)){
         text.style.display = "none";
     }
@@ -54,6 +54,27 @@ function idduplecheck(id,errordisplayId,okflagid,servletUrl){
                 document.getElementById(errordisplayId).style.display = "none"
                 document.getElementById(okflagid).value="1";
                 alert("중복 아이디가 없습니다.");
+            }
+        }
+    }
+}
+
+function pwdCheck(id,errordisplayId,servletUrl,pwdchangebtn){
+    let checkid = document.getElementById(id);
+    const xhr = new XMLHttpRequest();
+    xhr.open("get",servletUrl+"?temp_password="+checkid.value);
+    xhr.send();
+    xhr.onload = function (){
+        if(xhr.status==200){
+            if(xhr.response == "N"){
+                document.getElementById(errordisplayId).style.display = "block";
+                alert("비밀번호가 일치하지 않습니다.");
+            }
+            else{
+                document.getElementById(errordisplayId).style.display = "none"
+                checkid.style.display = "none"
+                document.getElementById(pwdchangebtn).disabled=false;
+                alert("비밀번호 확인이 완료되었습니다.");
             }
         }
     }
@@ -174,7 +195,7 @@ function checkInputPhone(id,textid){
     let Check = document.getElementById(id);
     let Char = Check.value;
     let text = document.getElementById(textid);
-    const regex = /\d{2,3}-\d{3,4}-\d{4}/g
+    const regex = /^\d{2,3}-\d{3,4}-\d{4}$/g
     if(regex.test(Char)){
         text.style.display = "none";
     }
@@ -229,7 +250,6 @@ function checkInputInterest(id,id2,textid){
 
     let Char = Check.value;
     let Char2 = Check2.value;
-    console.log(Char,Char2);
     let text = document.getElementById(textid);
     if((Char==0 && Char2==0)){
         text.style.display = "block";
@@ -259,6 +279,7 @@ function checkInputCheckBox(id,textid){
 }
 function checklast(user_id,div_err_user_id
     ,pwd,div_err_pwd
+    ,pwd2,div_err_pwd2
     ,name,div_err_name
     ,email,div_err_email
     ,phone_number,div_err_phone_number
@@ -268,6 +289,7 @@ function checklast(user_id,div_err_user_id
     ,addr1,div_err_addr1
     ,addr2,div_err_addr2){
     if(checkInputPw(pwd,div_err_pwd)
+        &&checkInputPw2(pwd,pwd2,div_err_pwd2)
         &&checkInputName(name,div_err_name)
         &&checkInputEmail(email,div_err_email)
         &&checkInputPhone(phone_number,div_err_phone_number)
@@ -295,7 +317,7 @@ function checklast(user_id,div_err_user_id
     }
 }
 
-function checklastmodify(
+function checkLastModify(
     email,div_err_email
     ,phone_number,div_err_phone_number
     ,birthday,div_err_birthday
@@ -309,6 +331,17 @@ function checklastmodify(
         &&checkInputCommon(addr1,div_err_addr1)
         &&checkInputCommon(addr2,div_err_addr2)){
         alert("변경이 완료되었습니다.");
+    }
+    else{
+        alert("조건에 맞게 수정해주세요.");
+        event.preventDefault();
+    }
+}
+function checkLastModifyPwd(
+    pwd,div_err_pwd
+    ,pwd2,div_err_pwd2){
+    if(checkInputPw(pwd,div_err_pwd)
+        &&checkInputPw2(pwd,pwd2,div_err_pwd2)){
     }
     else{
         alert("조건에 맞게 수정해주세요.");

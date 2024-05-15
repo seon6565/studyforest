@@ -1,4 +1,4 @@
-package org.fullstack4.studyforest.controller.bbs;
+package org.fullstack4.studyforest.controller;
 
 import lombok.extern.log4j.Log4j2;
 import org.fullstack4.studyforest.domain.BbsFreeEntity;

@@ -60,6 +60,7 @@ public class MemberEntity {
     @Column(name = "modify_date", nullable = true, insertable = false, updatable = true)
     private LocalDateTime modify_date;
 
+    private LocalDateTime password_changedate;
     private LocalDateTime temp_password_validdate;
     private LocalDateTime login_date;
     private LocalDateTime ban_date;
@@ -76,5 +77,13 @@ public class MemberEntity {
     }
     public void modifyPassword(String password){
         this.password = password;
+        this.password_changedate = LocalDateTime.now();
+        this.temp_password = null;
+        this.temp_password_validdate = null;
+    }
+
+    public void leave(){
+        this.state = "N";
+        this.leave_date = LocalDateTime.now();
     }
 }

@@ -8,8 +8,8 @@ import org.springframework.data.domain.Page;
 public interface MemberServiceIf {
     int regist(MemberDTO memberDTO);
     MemberDTO view(int idx);
-    void modify(MemberDTO memberDTO);
-    void modifyPassword(MemberDTO memberDTO);
-    void delete(int idx);
+    MemberDTO modify(MemberDTO memberDTO);
+    MemberDTO modifyPassword(MemberDTO memberDTO);
+    void leave(int idx);
     int idCheck(String user_id);
 }
