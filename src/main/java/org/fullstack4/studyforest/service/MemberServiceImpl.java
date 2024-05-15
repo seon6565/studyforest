@@ -42,13 +42,24 @@ public class MemberServiceImpl implements MemberServiceIf{
         Optional<MemberEntity> result = memberRepository.findById(memberDTO.getMember_idx());
         MemberEntity memberEntity = result.orElse(null);
         if(memberEntity!=null) {
-            memberEntity.modify(memberDTO.getPassword(),
+            memberEntity.modify(
                     memberDTO.getEmail(),
                     memberDTO.getPhone(),
                     memberDTO.getBirthday(),
                     memberDTO.getAddr1(),
                     memberDTO.getAddr2(),
                     memberDTO.getAddr_number());
+        }
+    }
+
+    @Override
+    public void modifyPassword(MemberDTO memberDTO) {
+        Optional<MemberEntity> result = memberRepository.findById(memberDTO.getMember_idx());
+        MemberEntity memberEntity = result.orElse(null);
+        if(memberEntity!=null) {
+            memberEntity.modifyPassword(
+                    memberDTO.getPassword()
+            );
         }
     }
 

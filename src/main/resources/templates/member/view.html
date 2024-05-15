@@ -5,11 +5,75 @@
 
 <div layout:fragment="content">
     <div class="container">
-        <h1>멤버 상세 페이지</h1>
+        <header class="py-3">
+            <div class="container px-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-xxl-6">
+                        <div class="text-center my-5">
+                            <h1 class="fw-bolder mb-3">마이페이지</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="card">
+            <div class="card-body p-4">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-outline-primary" type="button" onclick="location.href='/member/mypage'">오늘의 학습</button>
+                    <button class="btn btn-outline-primary" type="button" onclick="location.href='/member/myshare'">나의 학습</button>
+                    <button class="btn btn-outline-primary" type="button" onclick="location.href='/member/mystudy'">공유 학습</button>
+                </div>
+                <div class="mb-3">
+                    아이디
+                    <span class="form-control">[[${session.memberDTO.userId}]]</span>
+                </div>
+                <div class="mb-3">
+                    비밀번호
+                    <button class="form-control" type="button" onclick="location.href='/member/modifypwd'">비밀번호 변경하기</button>
+                </div>
+                <div class="mb-3">
+                    이름
+                    <span class="form-control">[[${session.memberDTO.name}]]</span>
+                </div>
+                <div class="mb-3">
+                    이메일
+                    <span class="form-control">[[${session.memberDTO.email}]]</span>
+                </div>
+                <div class="mb-3">
+                    번호
+                    <span class="form-control">[[${session.memberDTO.phone}]]</span>
+                </div>
+                <div class="mb-3">
+                    생년월일
+                    <span class="form-control">[[${session.memberDTO.birthday}]]</span>
+                </div>
+                <div class="mb-3">
+                    우편번호
+                    <span class="form-control">[[${session.memberDTO.addr_number}]]</span>
+                </div>
+                <div class="mb-3">
+                    주소
+                    <span class="form-control">[[${session.memberDTO.addr1}]]</span>
+                </div>
+                <div class="mb-3">
+                    상세 주소
+                    <span class="form-control">[[${session.memberDTO.addr2}]]</span>
+                </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button class="btn btn-outline-primary" type="button" onclick="location.href='/member/modify'">회원정보수정</button>
+                    <button class="btn btn-outline-primary" type="button" onclick="location.href='/member/delete'">탈퇴하기</button>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
 <script layout:fragment="script" th:inline="javascript">
-    const arr=[[${arr}]]
-    console.log(arr);
+    function goDelete(){
+        const frm = document.getElementById("frmDelete");
+        if(confirm("회원탈퇴를 하시겠습니까?")){
+            frm.submit();
+        }
+    }
 </script>
+</div>
+</html>

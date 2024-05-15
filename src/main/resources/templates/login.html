@@ -18,6 +18,7 @@
                 </div>
             </header>
             <form id="frmLogin" name="frmLogin" method="post" action="/login" onsubmit="checkloginall('frmLogin','user_id','pwd')">
+                <input type="hidden" name="acc_url" id="acc_url" th:value="${acc_url}">
                 <div class="mb-3">
                     <label for="user_id" class="form-label">아이디</label>
                     <input type="text" class="form-control" name="user_id" id="user_id" th:value="${save_id}" maxlength="20" onkeyup="checkloginid('user_id','btnLogin','div_err_user_id')">
@@ -31,11 +32,11 @@
                 <div class="mb-3">
                     <div class="form-check form-switch form-check-inline">
                         <label class="form-check-label" for="save_id">아이디저장</label>
-                        <input class="form-check-input" type="checkbox" role="switch" name="save_id" id="save_id" value="checked" [[${save_id_flag}]]>
+                        <input class="form-check-input" type="checkbox" role="switch" name="save_id" id="save_id" value="checked" th:checked="${save_id_flag}">
                     </div>
                     <div class="form-check form-switch form-check-inline">
                         <label class="form-check-label" for="auto_login">자동로그인</label>
-                        <input class="form-check-input" type="checkbox" role="switch" name="auto_login" id="auto_login" value="checked" [[${login_flag}]]>
+                        <input class="form-check-input" type="checkbox" role="switch" name="auto_login" id="auto_login" value="checked" th:checked="${auto_login_flag}" >
                     </div>
                     <div class="form-check-inline">
                         <a href="/member/searchpwd">비밀번호찾기</a>

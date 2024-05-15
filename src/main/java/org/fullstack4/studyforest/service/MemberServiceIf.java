@@ -9,6 +9,7 @@ public interface MemberServiceIf {
     int regist(MemberDTO memberDTO);
     MemberDTO view(int idx);
     void modify(MemberDTO memberDTO);
+    void modifyPassword(MemberDTO memberDTO);
     void delete(int idx);
     int idCheck(String user_id);
 }

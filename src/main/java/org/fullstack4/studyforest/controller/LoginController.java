@@ -26,6 +26,22 @@ public class LoginController {
     private final CommonUtil commonUtil;
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public void loginGET(HttpServletRequest req, Model model){
+        HttpSession session = req.getSession();
+        Cookie cookies[] = req.getCookies();
+        for(Cookie cookie : cookies){
+            if(cookie.getName().equals("auto_login")) {
+                model.addAttribute("auto_login", cookie.getValue());
+            }
+            else if(cookie.getName().equals("auto_login_flag")) {
+                model.addAttribute("auto_login_flag", cookie.getValue());
+            }
+            else if(cookie.getName().equals("save_id")) {
+                model.addAttribute("save_id", cookie.getValue());
+            }
+            else if(cookie.getName().equals("save_id_flag")) {
+                model.addAttribute("save_id_flag", cookie.getValue());
+            }
+        }
         String acc_url = req.getHeader("referer");
         String uri = acc_url;
 //        try {
@@ -40,11 +56,9 @@ public class LoginController {
                             @RequestParam(name="acc_url", defaultValue = "/", required = false) String acc_url,
                             HttpServletRequest req,
                             Model model,
-                            RedirectAttributes redirectAttributes,
                             HttpServletResponse response){
         String save_id = null;
         String auto_login = null;
-        log.info("loginDTO = " + loginDTO);
         loginDTO.setPwd(commonUtil.encryptPwd(loginDTO.getPwd()));
         MemberDTO LoginMemberDTO = loginServiceIf.login(loginDTO);
         String uri = acc_url;
@@ -83,9 +97,9 @@ public class LoginController {
             }
             return "redirect:"+uri;
         }
-        redirectAttributes.addFlashAttribute("errors","사용자 정보가 일치하지 않습니다.");
-        redirectAttributes.addFlashAttribute("errorAlert","alert('사용자 정보가 일치하지 않습니다.')");
-        return "redirect:/login";
+        model.addAttribute("acc_url", uri);
+        model.addAttribute("error","alert(`로그인 실패`);");
+        return "/login";
     }
 
     @RequestMapping("/logout")
@@ -121,29 +135,26 @@ public class LoginController {
                 response.addCookie(cookie4);
             }
         }
-        log.info("============================");
-        log.info("LoginController logout");
-        log.info("============================");
 
         return "redirect:/";
     }
 
     @RequestMapping("/autologin")
-    public String autologin(HttpServletRequest req, HttpServletResponse response){
+    public String autologin(HttpServletRequest req){
         String uri = req.getHeader("referer");
         HttpSession session= req.getSession();
-        log.info("============================");
-        log.info("LoginController loginCheck");
-        log.info("============================");
         if(session.getAttribute("memberDTO")==null) {
-            Cookie cookies[] = req.getCookies();
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("auto_login")) {
-                    session.setAttribute("memberDTO", loginServiceIf.cookieLogin(cookie.getValue()));
-                    return "redirect:"+uri;
+            if(req.getCookies() !=null) {
+                Cookie cookies[] = req.getCookies();
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("auto_login")) {
+                        session.setAttribute("memberDTO", loginServiceIf.cookieLogin(cookie.getValue()));
+
+                        return "redirect:" + uri;
+                    }
                 }
             }
         }
-        return "redirect:/login/login";
+        return "redirect:/login";
     }
 }

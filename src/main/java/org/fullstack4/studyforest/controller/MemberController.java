@@ -39,7 +39,6 @@ public class MemberController {
         memberDTO.setPassword(commonUtil.encryptPwd(memberDTO.getPassword()));
         log.info("memberDTO : " + memberDTO);
         if(bindingResult.hasErrors()){
-            log.info("bindingResult Errors : " +memberDTO);
             redirectAttributes.addFlashAttribute("errors",bindingResult.getAllErrors());
             redirectAttributes.addFlashAttribute("memberDTO",memberDTO);
             return "redirect:/member/regist";
@@ -47,7 +46,7 @@ public class MemberController {
 
         int result = memberServiceIf.regist(memberDTO);
         if(result > 0 ){
-            return "redirect:/";
+            return "redirect:/login";
         }
         else{
             return "/member/regist";
@@ -55,9 +54,6 @@ public class MemberController {
     }
     @GetMapping("/duplecheck")
     public void duplecheckGET(HttpServletRequest request, HttpServletResponse response){
-        log.info("============================");
-        log.info("MemberController duplecheckGET");
-        log.info("============================");
         String user_id = request.getParameter("user_id");
         log.info("user_id=" +user_id);
         int count = 0;
@@ -105,12 +101,9 @@ public class MemberController {
     }
     @PostMapping("/delete")
     public String deletePOST(int member_idx, HttpServletRequest request){
-        log.info("============================");
-        log.info("MemberController deletePOST");
-        log.info("============================");
         memberServiceIf.delete(member_idx);
         request.getSession().invalidate();
-        return "redirect:/login/logout";
+        return "redirect:/logout";
     }
 
     @GetMapping("/searchpwd")

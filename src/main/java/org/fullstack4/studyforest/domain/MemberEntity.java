@@ -25,16 +25,12 @@ public class MemberEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int member_idx;
-
-
     @Column(length = 20, nullable = false, unique = true)
     private String userId;
-
     @Column(length = 128, nullable = false)
     private String password;
     @Column(length = 10, nullable = false)
     private String name;
-
     @Column(length = 5, nullable = true)
     private String roles; //user,admin
     @Column(length = 30, nullable = false)
@@ -69,8 +65,7 @@ public class MemberEntity {
     private LocalDateTime ban_date;
     private LocalDateTime leave_date;
 
-    public void modify(String password, String email, String phone, LocalDate birthday, String addr1, String addr2, String addr_number){
-        this.password = password;
+    public void modify(String email, String phone, LocalDate birthday, String addr1, String addr2, String addr_number){
         this.email = email;
         this.phone = phone;
         this.birthday = birthday;
@@ -78,5 +73,8 @@ public class MemberEntity {
         this.addr2 = addr2;
         this.addr_number = addr_number;
         this.modify_date = LocalDateTime.now();
+    }
+    public void modifyPassword(String password){
+        this.password = password;
     }
 }

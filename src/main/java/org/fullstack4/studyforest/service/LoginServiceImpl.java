@@ -30,9 +30,13 @@ public class LoginServiceImpl implements LoginServiceIf{
 
     @Override
     public MemberDTO cookieLogin(String user_id) {
-//        MemberVO memberVO = loginXmlMapper.Cookie_login(user_id);
-//            MemberDTO memberDTO = modelMapper.map(memberVO, MemberDTO.class);
-            return null; //memberDTO;
+        Optional<MemberEntity> result = memberRepository.findByUserId(user_id);
+        MemberEntity memberEntity = result.orElse(null);
+        if(memberEntity!=null){
+            MemberDTO memberDTO = modelMapper.map(memberEntity, MemberDTO.class);
+            return memberDTO;
+        }
+        return null;
     }
 
 }

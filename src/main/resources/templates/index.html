@@ -4,10 +4,11 @@
 
 <div layout:fragment="content">
     <div class="container">
-        <h1>주제 게시판 템플릿</h1>
+        <h1>메인</h1>
+        <h1>[[${session.memberDTO}]]</h1>
     </div>
 </div>
 
 <script layout:fragment="script" th:inline="javascript">
-    [[${session.memberDTO}]]
+
 </script>

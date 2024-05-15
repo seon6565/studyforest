@@ -294,3 +294,24 @@ function checklast(user_id,div_err_user_id
         event.preventDefault();
     }
 }
+
+function checklastmodify(
+    email,div_err_email
+    ,phone_number,div_err_phone_number
+    ,birthday,div_err_birthday
+    ,addr_number,div_err_addr_number
+    ,addr1,div_err_addr1
+    ,addr2,div_err_addr2){
+    if(checkInputEmail(email,div_err_email)
+        &&checkInputPhone(phone_number,div_err_phone_number)
+        &&checkInputBirth(birthday,div_err_birthday)
+        &&checkInputAddrNumber(addr_number,div_err_addr_number)
+        &&checkInputCommon(addr1,div_err_addr1)
+        &&checkInputCommon(addr2,div_err_addr2)){
+        alert("변경이 완료되었습니다.");
+    }
+    else{
+        alert("조건에 맞게 수정해주세요.");
+        event.preventDefault();
+    }
+}

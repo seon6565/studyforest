@@ -16,7 +16,7 @@
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid" >
-        <a href="/list" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
             <img src="/img/github.png" width="40" height="32" class="bi me-2">
             <span class="fs-4">Study Forest</span>
         </a>
@@ -25,12 +25,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a href="bbs/list" class="nav-link link-secondary">자유게시판</a></li>
-                    <li th:if="${session.memberDTO}" class="nav-item"><a th:href="@{/member/mypage(userId='user_id')}" class="nav-link link-secondary">${session.memberDTO.user_id}</a>
+                <li class="nav-item"><a href="/" class="nav-link link-secondary">전체게시판</a></li>
+                <li th:if="${session.memberDTO}" class="nav-item">
+                    <a th:href="@{/member/view(member_idx=${session.memberDTO.member_idx})}" class="nav-link link-secondary">[[${session.memberDTO.userId}]]님 환영합니다.</a>
                 </li>
-                    <li th:if="${session.memberDTO == null}" class="nav-item"><a href="/member/regist" class="nav-link link-secondary">회원가입</a></li>
-                    <li th:if="${session.memberDTO}" class="nav-item"><a href="/logout" class="nav-link link-secondary">로그아웃</a></li>
-                    <li th:if="${session.memberDTO == null}" class="nav-item"><a href="/login" class="nav-link link-secondary">로그인</a></li>
+                <li th:if="${session.memberDTO == null}" class="nav-item"><a href="/member/regist" class="nav-link link-secondary">회원가입</a></li>
+                <li th:if="${session.memberDTO}" class="nav-item"><a href="/logout" class="nav-link link-secondary">로그아웃</a></li>
+                <li th:if="${session.memberDTO == null}" class="nav-item"><a href="/autologin" class="nav-link link-secondary">로그인</a></li>
             </ul>
         </div>
     </div>
@@ -64,6 +65,7 @@
         </ul>
     </footer>
 </div>
+<script>[[${error}]]</script>
 <script layout:fragment="script" th:inline="javascript">
 
 </script>

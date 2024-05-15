@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{common/common.html}">
+<script layout:fragment="script" th:inline="javascript" src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+<div layout:fragment="content">
+    <div class="container">
+        <header class="py-3">
+            <div class="container px-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-xxl-6">
+                        <div class="text-center my-5">
+                            <h1 class="fw-bolder mb-3">내 정보 수정하기</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="card">
+            <div class="card-body p-4">
+                <form name="frmModify" id="frmModify" method="post" action="/member/modify"
+                      onsubmit="checklastmodify('email','div_err_email','phone','div_err_phone','birthday','div_err_birthday','addr_number','div_err_addr_number','addr1','div_err_addr1','addr2','div_err_addr2')">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">이메일</label>
+                        <input type="email" class="form-control" name="email" id="email"  onkeyup="checkInputEmail('email','div_err_email')" maxlength="30">
+                        <div class="form-text" id="div_err_email" style="display:none; color:red">OOO@OOO.OOO형태로 입력해주세요.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">휴대폰번호</label>
+                        <input type="tel" class="form-control" name="phone" id="phone"  onkeyup="checkInputPhone('phone','div_err_phone')" maxlength="20">
+                        <div class="form-text" id="div_err_phone" style="display:none; color:red">OOO-OOOO-OOOO형태로 입력해주세요.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="birthday" class="form-label">생년월일</label>
+                        <input type="date" class="form-control" name="birthday" id="birthday" onchange="checkInputBirth('birthday','div_err_birthday')"maxlength="20">
+                        <div class="form-text" id="div_err_birthday" style="display:none; color:red">오늘까지의 날짜로만 입력 가능합니다.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addr_number" class="form-label">우편번호</label>
+                        <input type="text" class="form-control" name="addr_number" id="addr_number" onclick="addressSearch()" readonly>
+                        <div class="form-text" id="div_err_addr_number" style="display:none; color:red">우편번호 5자리숫자를 입력해 주세요.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addr1" class="form-label">주소</label>
+                        <input type="text" class="form-control" name="addr1" id="addr1"  onclick="addressSearch()" readonly >
+                        <div class="form-text" id="div_err_addr1" style="display:none; color:red">값을 입력해 주세요.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="addr2" class="form-label">상세주소</label>
+                        <input type="text" class="form-control" name="addr2" id="addr2"  onkeyup="checkInputCommon('addr2','div_err_addr2')" maxlength="50">
+                        <div class="form-text" id="div_err_addr2" style="display:none; color:red">값을 입력해 주세요.</div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="submit">정보 수정</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
