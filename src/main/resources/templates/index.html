@@ -1,14 +1,39 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org"
-      layout:decorate="~{common/common.html}">
-
-<div layout:fragment="content">
-    <div class="container">
-        <h1>메인</h1>
-        <h1>[[${session.memberDTO}]]</h1>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/valuecheck.js"></script>
+    <script src="/js/bbslist.js"></script>
+    <script src="/js/loginvaluecheck.js"></script>
+    <script src="/js/kakaoapi.js"></script>
+    <script src="/js/mainheader.js"></script>
+    <script src="/js/header.js"></script>
+    <script src="/js/footer.js"></script>
+    <title>Study Forest</title>
+</head>
+<body>
+    <div id="header">
+        <script>header();</script>
     </div>
+    <div class="container" id="main">
+        <header class="py-3">
+            <script>mainheader();</script>
+        </header>
+        <div class="card">
+            <div class="card-body p-4" id="maincontent">
+
+            </div>
+        </div>
+    </div>
+</body>
+
+<div id="footer">
+    <script>footer();</script>
 </div>
-
-<script layout:fragment="script" th:inline="javascript">
-
+</html>
+<script>
+    bbsList('maincontent','/bbs/list','');
 </script>

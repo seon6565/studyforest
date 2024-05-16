@@ -10,7 +10,7 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-8 col-xxl-6">
                         <div class="text-center my-5">
-                            <h1 class="fw-bolder mb-3">마이페이지</h1>
+                            <h1 class="fw-bolder mb-3">내가 등록한 글</h1>
                         </div>
                     </div>
                 </div>
@@ -24,44 +24,34 @@
                     <button class="btn btn-outline-primary" type="button" onclick="location.href='/member/myshare'">공유 학습</button>
                 </div>
                 <div class="mb-3">
-                    아이디
-                    <span class="form-control">[[${session.memberDTO.userId}]]</span>
+                    글번호
+                    <span class="form-control">[[${bbsDTO.bbsIdx}]]</span>
                 </div>
                 <div class="mb-3">
-                    비밀번호
-                    <button class="form-control" type="button" onclick="location.href='/member/modifypwd'">비밀번호 변경하기</button>
+                    카테고리
+                    <span class="form-control">[[${bbsDTO.category}]]</span>
                 </div>
                 <div class="mb-3">
-                    이름
-                    <span class="form-control">[[${session.memberDTO.name}]]</span>
+                    카테고리2
+                    <span class="form-control">[[${bbsDTO.category2}]]</span>
                 </div>
                 <div class="mb-3">
-                    이메일
-                    <span class="form-control">[[${session.memberDTO.email}]]</span>
+                    제목
+                    <span class="form-control">[[${bbsDTO.title}]]</span>
                 </div>
                 <div class="mb-3">
-                    번호
-                    <span class="form-control">[[${session.memberDTO.phone}]]</span>
+                    내용
+                    <textarea rows="10" cols="60" style="resize: none;" class="form-control">[[${bbsDTO.content}]] </textarea>
                 </div>
                 <div class="mb-3">
-                    생년월일
-                    <span class="form-control">[[${session.memberDTO.birthday}]]</span>
+                    등록일
+                    <span class="form-control">[[ ${bbsDTO.reg_date}]] </span>
                 </div>
-                <div class="mb-3">
-                    우편번호
-                    <span class="form-control">[[${session.memberDTO.addr_number}]]</span>
-                </div>
-                <div class="mb-3">
-                    주소
-                    <span class="form-control">[[${session.memberDTO.addr1}]]</span>
-                </div>
-                <div class="mb-3">
-                    상세 주소
-                    <span class="form-control">[[${session.memberDTO.addr2}]]</span>
-                </div>
+
+
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <button class="btn btn-outline-primary" type="button" onclick="location.href='/member/modify'">회원정보수정</button>
-                    <button class="btn btn-outline-primary" type="button" onclick="goDelete()">탈퇴하기</button>
+                    <a class="btn btn-outline-primary" type="button" th:href="|@{/member/mybbsmodify(bbsIdx=${bbsDTO.bbsIdx},category=${bbsDTO.category})}|">글수정</a>
+                    <a class="btn btn-outline-primary" type="button" onclick="goDelete()" th:href="|@{/member/mybbsdelete(bbsIdx=${bbsDTO.bbsIdx},category=${bbsDTO.category})}|">글삭제</a>
                 </div>
             </div>
         </div>
@@ -69,9 +59,8 @@
 
 <script layout:fragment="script" th:inline="javascript">
     function goDelete(){
-        if(confirm("회원탈퇴를 하시겠습니까?")){
-            alert("탈퇴가 완료되었습니다.");
-            location.href='/member/leave';
+        if(confirm("삭제를 하시겠습니까?")){
+            alert("삭제가 완료되었습니다.");
         }
     }
 </script>

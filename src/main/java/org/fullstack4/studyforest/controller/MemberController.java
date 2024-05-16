@@ -5,9 +5,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.fullstack4.studyforest.dto.BbsDTO;
 import org.fullstack4.studyforest.dto.MemberDTO;
+import org.fullstack4.studyforest.dto.PageRequestDTO;
+import org.fullstack4.studyforest.dto.PageResponseDTO;
+import org.fullstack4.studyforest.service.BbsServiceIf;
 import org.fullstack4.studyforest.service.MemberServiceIf;
 import org.fullstack4.studyforest.util.CommonUtil;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +30,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberServiceIf memberServiceIf;
+    private final BbsServiceIf bbsServiceIf;
     private final CommonUtil commonUtil;
     @GetMapping("/view")
     public void view(){
@@ -124,19 +130,16 @@ public class MemberController {
             }
         }
     }
-
     @GetMapping("/leave")
     public String deletePOST(HttpServletRequest request){
         MemberDTO memberDTO = (MemberDTO) request.getSession().getAttribute("memberDTO");
         memberServiceIf.leave(memberDTO.getMember_idx());
         return "redirect:/logout";
     }
-
     @GetMapping("/searchpwd")
     public void searchpwd(){
 
     }
-
     @PostMapping("/searchpwd")
     public String searchpwdPost(){
 
@@ -145,12 +148,52 @@ public class MemberController {
 
     @GetMapping("/mypage")
     public void mypage(){
-
     }
+
+    @GetMapping("/mybbsview")
+    public void view(BbsDTO bbsDTO, PageRequestDTO pageRequestDTO, Model model){
+        BbsDTO resultbbsDTO = bbsServiceIf.view(bbsDTO);
+        model.addAttribute("bbsDTO",resultbbsDTO);
+    }
+
+    @GetMapping("/mybbsregist")
+    public void regist(BbsDTO bbsDTO, PageRequestDTO pageRequestDTO, Model model){
+    }
+
+    @PostMapping("/mybbsregist")
+    public String registPost(BbsDTO bbsDTO, PageRequestDTO pageRequestDTO, Model model){
+        bbsServiceIf.regist(bbsDTO);
+        return "redirect:/member/mystudy";
+    }
+    @GetMapping("/mybbsmodify")
+    public void modifyGet(BbsDTO bbsDTO, PageRequestDTO pageRequestDTO, Model model){
+        BbsDTO viewDTO = bbsServiceIf.view(bbsDTO);
+        model.addAttribute("bbsDTO",viewDTO);
+    }
+    @PostMapping("/mybbsmodify")
+    public String modifyPost(BbsDTO bbsDTO, Model model){
+        log.info(bbsDTO + "bbsDTOdddd");
+        bbsServiceIf.modify(bbsDTO);
+        return "redirect:/member/mybbsview?bbsIdx="+bbsDTO.getBbsIdx()+"&category="+bbsDTO.getCategory();
+    }
+
+    @GetMapping("/mybbsdelete")
+    public String delete(BbsDTO bbsDTO, Model model){
+        bbsServiceIf.delete(bbsDTO);
+        return "redirect:/member/mystudy";
+    }
+
     @GetMapping("/mystudy")
-    public void mystudy(){
+    public void mystudy(PageRequestDTO pageRequestDTO, Model model,HttpServletRequest request){
+        MemberDTO memberDTO = (MemberDTO) request.getSession().getAttribute("memberDTO");
+        String user_id = memberDTO.getUserId();
+        pageRequestDTO.setCategory("free");
+        PageResponseDTO<BbsDTO> pageResponseDTO = bbsServiceIf.listUser(pageRequestDTO,user_id);
+        log.info("pageResponseDTO test : " + pageResponseDTO);
+        model.addAttribute("pageResponseDTO" , pageResponseDTO);
 
     }
+
     @GetMapping("/myshare")
     public void myshare(){
 

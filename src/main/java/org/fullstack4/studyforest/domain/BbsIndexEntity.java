@@ -17,7 +17,5 @@ public class BbsIndexEntity extends BbsEntity{
     private int bbsIdx;
     @Column(length = 20, nullable = false)
     private String category;
-    @Column(length = 20, nullable = false)
-    private String user_id;
 
 }

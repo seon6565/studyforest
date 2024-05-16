@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface BbsSearch {
 
-    Page<BbsFreeEntity> search(Pageable pageable, String[] types, String search_keyword, String category);
+    Page<BbsFreeEntity> search(Pageable pageable, String[] types, String search_keyword, String table, String category);
+
+    Page<BbsFreeEntity> searchUserList(Pageable pageable, String[] types, String search_keyword, String table, String category, String user_id);
 
 }

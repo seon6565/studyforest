@@ -18,40 +18,117 @@ public class BbsSearchImpl extends QuerydslRepositorySupport implements BbsSearc
     public BbsSearchImpl() {
         super(BbsFreeEntity.class);
     }
-
     @Override
-    public Page<BbsFreeEntity> search(Pageable pageable, String[] types, String search_keyword, String category) {
-        QBbsFreeEntity qBoard = QBbsFreeEntity.bbsFreeEntity;
-        JPQLQuery<BbsFreeEntity> query = from(qBoard);
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        if(category != null && category.length()>0){
-            booleanBuilder.or(qBoard.category.contains(category));
-        }
-        if(types !=null && types.length > 0 && search_keyword != null && search_keyword.length()>0){
-            for(String type : types){
-                switch (type) {
-                    case "t":
-                        booleanBuilder.or(qBoard.title.contains(search_keyword));
-                        break;
+    public Page<BbsFreeEntity> search(Pageable pageable, String[] types, String search_keyword, String category, String category2) {
+        if(category.equals("free")) {
+            QBbsFreeEntity qBoard = QBbsFreeEntity.bbsFreeEntity;
+            JPQLQuery<BbsFreeEntity> query = from(qBoard);
+            BooleanBuilder booleanBuilder = new BooleanBuilder();
+            if (category2 != null && category2.length() > 0) {
+                booleanBuilder.or(qBoard.category.contains(category2));
+            }
+            if (types != null && types.length > 1 && search_keyword != null && search_keyword.length() > 0) {
+                for (String type : types) {
+                    switch (type) {
+                        case "t":
+                            booleanBuilder.and(qBoard.title.contains(search_keyword));
+                            break;
 
-                    case "c":
-                        booleanBuilder.or(qBoard.content.contains(search_keyword));
-                        break;
+                        case "c":
+                            booleanBuilder.or(qBoard.content.contains(search_keyword));
+                            break;
 
-                    case "w":
-                        booleanBuilder.or(qBoard.user_id.contains(search_keyword));
-                        break;
+                        case "u":
+                            booleanBuilder.or(qBoard.user_id.contains(search_keyword));
+                            break;
+                    }
+                }
+            }
+            else if(types != null && types.length == 1 && search_keyword != null && search_keyword.length() > 0) {
+                for (String type : types) {
+                    switch (type) {
+                        case "t":
+                            booleanBuilder.and(qBoard.title.contains(search_keyword));
+                            break;
+
+                        case "c":
+                            booleanBuilder.and(qBoard.content.contains(search_keyword));
+                            break;
+                        case "u":
+                            booleanBuilder.and(qBoard.user_id.contains(search_keyword));
+                            break;
+
+                    }
                 }
             }
             query.where(booleanBuilder);
+            query.orderBy(qBoard.bbsIdx.desc());
+            this.getQuerydsl().applyPagination(pageable, query);
+            log.info("keyword query : {}", query);
+            List<BbsFreeEntity> boards = query.fetch();
+            int total = (int) query.fetchCount();
+            log.info("keyword board : " + boards);
+            log.info("keyword total : " + total);
+            log.info("category = " + category);
+            return new PageImpl<>(boards,pageable,total);
         }
-        this.getQuerydsl().applyPagination(pageable,query);
-        log.info("keyword query : {}", query);
-        List<BbsFreeEntity> boards = query.fetch();
-        int total = (int)query.fetchCount();
-        log.info("keyword board : "+boards);
-        log.info("keyword total : "+total);
-        log.info("category = " +category);
-        return new PageImpl<>(boards,pageable,total);
+        return null;
+    }
+
+    @Override
+    public Page<BbsFreeEntity> searchUserList(Pageable pageable, String[] types, String search_keyword, String category, String category2,String user_id) {
+        if(category.equals("free")) {
+            QBbsFreeEntity qBoard = QBbsFreeEntity.bbsFreeEntity;
+            JPQLQuery<BbsFreeEntity> query = from(qBoard);
+            BooleanBuilder booleanBuilder = new BooleanBuilder();
+            if (user_id != null && user_id.length() > 0) {
+                booleanBuilder.and(qBoard.user_id.eq(user_id));
+            }
+            if (category != null && category.length() > 0) {
+                booleanBuilder.and(qBoard.category.contains(category));
+            }
+            if (category2 != null && category2.length() > 0) {
+                booleanBuilder.and(qBoard.category2.contains(category2));
+            }
+            if (types != null && types.length > 1 && search_keyword != null && search_keyword.length() > 0) {
+                for (String type : types) {
+                    switch (type) {
+                        case "t":
+                            booleanBuilder.and(qBoard.title.contains(search_keyword));
+                            break;
+
+                        case "c":
+                            booleanBuilder.or(qBoard.content.contains(search_keyword));
+                            break;
+
+                    }
+                }
+            }
+            else if(types != null && types.length == 1 && search_keyword != null && search_keyword.length() > 0) {
+                for (String type : types) {
+                    switch (type) {
+                        case "t":
+                            booleanBuilder.and(qBoard.title.contains(search_keyword));
+                            break;
+
+                        case "c":
+                            booleanBuilder.and(qBoard.content.contains(search_keyword));
+                            break;
+
+                    }
+                }
+            }
+            query.where(booleanBuilder);
+            query.orderBy(qBoard.bbsIdx.desc());
+            this.getQuerydsl().applyPagination(pageable, query);
+            log.info("keyword query : {}", query);
+            List<BbsFreeEntity> boards = query.fetch();
+            int total = (int) query.fetchCount();
+            log.info("keyword board : " + boards);
+            log.info("keyword total : " + total);
+            log.info("category = " + category);
+            return new PageImpl<>(boards,pageable,total);
+        }
+        return null;
     }
 }

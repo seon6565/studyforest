@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
+
 
 @Log4j2
 @Controller
@@ -73,6 +75,22 @@ public class LoginController {
                 redirectAttributes.addFlashAttribute("info","alert(`탈퇴한 계정입니다.`);");
                 return "redirect:/login";
             }
+            else if(LoginMemberDTO.getState().equals("H")){
+                redirectAttributes.addFlashAttribute("info","alert(`6개월 이상 로그인 이력이 없어서 휴면 계정으로 전환되었습니다. 관리자에게 문의해 주세요.`);");
+                return "redirect:/login";
+            }
+
+            else if(LoginMemberDTO.getState().equals("B")){
+                redirectAttributes.addFlashAttribute("info","alert(`이용 규칙 위반에 의하여 이용이 제한된 아이디입니다. 관리자에게 문의해 주세요.`);");
+                return "redirect:/login";
+            }
+            else if(LoginMemberDTO.getLogin_date() == LocalDateTime.now().minusMonths(6)){
+                //비교 로직
+            }
+            else if(LoginMemberDTO.getState().equals("Y")){
+                //로그인일자 확인
+                LoginMemberDTO.setLogin_date(LocalDateTime.now());
+            }
             HttpSession session = req.getSession();
             if(loginDTO.getSave_id()!=null){
                 save_id=loginDTO.getUser_id();
@@ -99,9 +117,11 @@ public class LoginController {
             session.setAttribute("memberDTO",LoginMemberDTO);
             redirectAttributes.addFlashAttribute("info","alert(`로그인 성공`);");
             if(req.getServletPath().equals("/login")){
-                return "redirect:/";
+                //return "redirect:/";
+                return "redirect:/member/view";
             }
-            return "redirect:"+uri;
+            return "redirect:/member/view";
+            //return "redirect:"+uri;
         }
         model.addAttribute("acc_url", uri);
         model.addAttribute("info","alert(`로그인 실패`);");
@@ -159,7 +179,8 @@ public class LoginController {
                     }
                 }
             }
+            return "redirect:/login";
         }
-        return "redirect:/login";
+        return "redirect:/member/view";
     }
 }

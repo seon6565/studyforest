@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -20,10 +21,14 @@ import java.time.LocalDateTime;
 public class BbsDTO {
     private int bbsIdx;
     private String category;
+    private String category2;
+    private String hashtag;
     private String user_id;
     private String title;
     private String content;
-    private String display_date;
+    private String display_date_flag;
+    private LocalDate display_date_start;
+    private LocalDate display_date_end;
     private LocalDateTime reg_date;
     private LocalDateTime modify_date;
 }

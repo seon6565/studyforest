@@ -38,6 +38,8 @@ public class PageRequestDTO {
     private String search_type; //t=제목 c=내용 u=아이디
     private String[] search_types;
     private String search_word;
+    private String category;
+    private String category2;
     private String linkParams;
 
     public void setTotal_count(int total_count){this.total_count=total_count; }
@@ -47,7 +49,7 @@ public class PageRequestDTO {
         if(search_type == null || search_type.isEmpty()){
             return null;
         }
-        return search_type.split("");
+        return search_type.split(",");
     }
     public PageRequest getPageable(String...props){
         return PageRequest.of(this.page-1,this.page_size, Sort.by(props).descending());

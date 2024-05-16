@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @ToString
 @Entity
+@EntityListeners(value = {AuditingEntityListener.class})
 @Table(name="sf_member")
 public class MemberEntity {
     @Id
@@ -59,9 +61,10 @@ public class MemberEntity {
     @LastModifiedDate
     @Column(name = "modify_date", nullable = true, insertable = false, updatable = true)
     private LocalDateTime modify_date;
-
+    @CreatedDate
     private LocalDateTime password_changedate;
     private LocalDateTime temp_password_validdate;
+    @CreatedDate
     private LocalDateTime login_date;
     private LocalDateTime ban_date;
     private LocalDateTime leave_date;

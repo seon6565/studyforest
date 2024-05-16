@@ -24,6 +24,8 @@ public class PageResponseDTO<E> {
     private String search_type; //t=제목 c=내용 u=아이디
     private String[] search_types;
     private String search_word;
+    private String category;
+    private String category2;
     private String linkParams;
 
     private List<E> dtoList;
