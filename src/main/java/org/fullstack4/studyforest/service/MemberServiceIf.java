@@ -12,4 +12,8 @@ public interface MemberServiceIf {
     MemberDTO modifyPassword(MemberDTO memberDTO);
     void leave(int idx);
     int idCheck(String user_id);
+
+    void inactiveState(MemberDTO memberDTO);
+    void banState(MemberDTO memberDTO);
+    void loginState(MemberDTO memberDTO);
 }

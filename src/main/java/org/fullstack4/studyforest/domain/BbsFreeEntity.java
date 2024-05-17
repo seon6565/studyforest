@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Table(name="sf_bbsfree")
 public class BbsFreeEntity extends BbsEntity{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private int bbsIdx;
 

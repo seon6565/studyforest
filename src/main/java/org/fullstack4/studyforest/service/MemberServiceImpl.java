@@ -87,7 +87,28 @@ public class MemberServiceImpl implements MemberServiceIf{
             return 1;
         }
         return 0;
-       // int result = memberRepository.idCheck(user_id);
     }
+
+    @Override
+    public void inactiveState(MemberDTO memberDTO) {
+        MemberEntity memberEntity = modelMapper.map(memberDTO, MemberEntity.class);
+        memberEntity.inactiveState();
+        memberRepository.save(memberEntity);
+    }
+
+    @Override
+    public void banState(MemberDTO memberDTO) {
+        MemberEntity memberEntity = modelMapper.map(memberDTO, MemberEntity.class);
+        memberEntity.banState();
+        memberRepository.save(memberEntity);
+    }
+
+    @Override
+    public void loginState(MemberDTO memberDTO) {
+        MemberEntity memberEntity = modelMapper.map(memberDTO, MemberEntity.class);
+        memberEntity.loginState();
+        memberRepository.save(memberEntity);
+    }
+
 
 }

@@ -14,7 +14,7 @@ function header(){
 <!--                <li class="nav-item">-->
 <!--                    <a href="/member/view" class="nav-link link-secondary" id="userinfo">님 환영합니다.</a>-->
 <!--                </li>-->
-<!--                <li class="nav-item"><a href="/member/regist" class="nav-link link-secondary">회원가입</a></li>-->
+                <li class="nav-item"><a href="/member/regist" class="nav-link link-secondary">회원가입</a></li>
 <!--                <li class="nav-item"><a href="/logout" class="nav-link link-secondary">로그아웃</a></li>-->
                 <li class="nav-item"><a href="/autologin" class="nav-link link-secondary">로그인</a></li>
             </ul>

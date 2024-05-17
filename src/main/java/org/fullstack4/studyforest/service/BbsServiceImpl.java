@@ -55,9 +55,11 @@ public class BbsServiceImpl implements BbsServiceIf {
         if(category.equals("free")) {
             Optional<BbsFreeEntity> result = bbsFreeRepository.findById(bbsDTO.getBbsIdx());
             BbsFreeEntity board = result.orElse(null);
+            log.info("board = "+board);
             if (board != null) {
                 board.modify(bbsDTO.getCategory2(), bbsDTO.getTitle(), bbsDTO.getContent(), bbsDTO.getHashtag(), bbsDTO.getDisplay_date_flag()
                         , bbsDTO.getDisplay_date_start(), bbsDTO.getDisplay_date_end());
+                bbsFreeRepository.save(board);
             }
         }
     }

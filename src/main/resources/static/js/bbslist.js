@@ -1,8 +1,8 @@
-function bbsList(parentdivid,servletUrl,category){
+function bbsList(parentdivid,servletUrl,category,pagingParameter){
     let parentdiv = document.getElementById(parentdivid);
     parentdiv.innerHTML = ``;
     parentdiv.innerHTML += `<div id="bbssearch">
-        <form name="frmSearch" id="search" action="/bbs/list">
+        <form name="frmSearch" id="search" action="/bbs/list/free">
             <div class="input-group mb-1">
                 <span class="input-group-text ">검색범위</span>
                 <div class="input-group-text">
@@ -54,12 +54,7 @@ function bbsList(parentdivid,servletUrl,category){
     let tablebody = document.getElementById('tablebody');
     let pagingbody = document.getElementById('paging');
     const xhr = new XMLHttpRequest();
-    if(category !='') {
-        xhr.open("get", servletUrl + "/" + category);
-    }
-    else {
-        xhr.open("get", servletUrl);
-    }
+    xhr.open("get", servletUrl + "/" + category+pagingParameter);
     xhr.send();
     xhr.onload = function () {
         let result = JSON.parse(xhr.response);
@@ -78,7 +73,7 @@ function bbsList(parentdivid,servletUrl,category){
             if(result.prev_page_flag==true){
                 pagingbody.innerHTML +=`
                 <li class="page-item">
-                    <a onclick="bbsList('maincontent','/bbs/list?page=${result.page_block_start - 10}${result.linkParams}','${category}')" class="page-link" data-num="${result.page_block_start - 10}">Previous</a>
+                    <a onclick="bbsList('maincontent','/bbs/list','${category}','?page=${result.page_block_start - 10}${result.linkParams}')" class="page-link" data-num="${result.page_block_start - 10}">Previous</a>
                 </li>`;
             }
             for (let i = result.page_block_start; i < result.page_block_end; i++) {
@@ -90,14 +85,14 @@ function bbsList(parentdivid,servletUrl,category){
                 } else {
                     pagingbody.innerHTML += `
                     <li class="page-item">
-                        <a onclick="bbsList('maincontent','/bbs/list?page=${i}${result.linkParams}','${category}')" class="page-link" data-num="${i}">${i}</a>
+                        <a onclick="bbsList('maincontent','/bbs/list','${category}','?page=${i}${result.linkParams}')" class="page-link" data-num="${i}">${i}</a>
                     </li>`;
                 }
             }
             if (result.next_page_flag == true) {
                 pagingbody.innerHTML +=`
                 <li class="page-item">
-                    <a onclick="bbsList('maincontent','/bbs/list?page=${result.page_block_end + 1}${result.linkParams}','${category}')" class="page-link" data-num="${result.page_block_end + 1}">Next</a>
+                    <a onclick="bbsList('maincontent','/bbs/list','${category}','?page=${result.page_block_end + 1}${result.linkParams}')" class="page-link" data-num="${result.page_block_end + 1}">Next</a>
                 </li>
             `;
             }

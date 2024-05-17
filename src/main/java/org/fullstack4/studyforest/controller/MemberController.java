@@ -172,7 +172,6 @@ public class MemberController {
     }
     @PostMapping("/mybbsmodify")
     public String modifyPost(BbsDTO bbsDTO, Model model){
-        log.info(bbsDTO + "bbsDTOdddd");
         bbsServiceIf.modify(bbsDTO);
         return "redirect:/member/mybbsview?bbsIdx="+bbsDTO.getBbsIdx()+"&category="+bbsDTO.getCategory();
     }

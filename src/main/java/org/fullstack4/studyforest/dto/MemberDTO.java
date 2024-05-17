@@ -57,4 +57,5 @@ public class MemberDTO {
     private LocalDateTime login_date;
     private LocalDateTime ban_date;
     private LocalDateTime leave_date;
+    private LocalDateTime password_changedate;
 }

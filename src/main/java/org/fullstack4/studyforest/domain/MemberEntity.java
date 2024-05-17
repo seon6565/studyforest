@@ -89,4 +89,16 @@ public class MemberEntity {
         this.state = "N";
         this.leave_date = LocalDateTime.now();
     }
+
+    public void inactiveState(){
+        this.state = "H";
+    }
+    public void banState(){
+        this.state = "B";
+        this.ban_date = LocalDateTime.now();
+    }
+
+    public void loginState(){
+        this.login_date = LocalDateTime.now();
+    }
 }

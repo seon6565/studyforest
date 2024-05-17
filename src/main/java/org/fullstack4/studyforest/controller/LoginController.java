@@ -9,6 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.fullstack4.studyforest.dto.LoginDTO;
 import org.fullstack4.studyforest.dto.MemberDTO;
 import org.fullstack4.studyforest.service.LoginServiceIf;
+import org.fullstack4.studyforest.service.MemberServiceIf;
 import org.fullstack4.studyforest.util.CommonUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class LoginController {
     private final LoginServiceIf loginServiceIf;
+    private final MemberServiceIf memberServiceIf;
     private final CommonUtil commonUtil;
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public void loginGET(HttpServletRequest req, Model model){
@@ -71,25 +73,29 @@ public class LoginController {
 //            throw new RuntimeException(e);
 //        }
         if(LoginMemberDTO !=null){
-            if(LoginMemberDTO.getState().equals("N")){
+            if(LoginMemberDTO.getLogin_date().isBefore(LocalDateTime.now().minusMonths(6))){
+                memberServiceIf.inactiveState(LoginMemberDTO);
+                redirectAttributes.addFlashAttribute("info","alert(`6개월 이상 로그인 이력이 없어서 휴면 계정으로 전환되었습니다. \\n 관리자에게 문의해 주세요.`);");
+                return "redirect:/login";
+            }
+            if(LoginMemberDTO.getState().equals("Y")){
+                memberServiceIf.loginState(LoginMemberDTO);
+                if(LoginMemberDTO.getPassword_changedate().isBefore(LocalDateTime.now().minusMonths(6))){
+                    redirectAttributes.addFlashAttribute("info2","alert(`비밀번호를 변경하시지 않으신지 6개월이 지났습니다. \\n 비밀번호 변경을 권장드립니다.`);");
+                }
+            }
+            else if(LoginMemberDTO.getState().equals("N")){
                 redirectAttributes.addFlashAttribute("info","alert(`탈퇴한 계정입니다.`);");
                 return "redirect:/login";
             }
             else if(LoginMemberDTO.getState().equals("H")){
-                redirectAttributes.addFlashAttribute("info","alert(`6개월 이상 로그인 이력이 없어서 휴면 계정으로 전환되었습니다. 관리자에게 문의해 주세요.`);");
+                redirectAttributes.addFlashAttribute("info","alert(`6개월 이상 로그인 이력이 없어서 휴면 계정으로 전환되었습니다. \\n 관리자에게 문의해 주세요.`);");
                 return "redirect:/login";
             }
 
             else if(LoginMemberDTO.getState().equals("B")){
-                redirectAttributes.addFlashAttribute("info","alert(`이용 규칙 위반에 의하여 이용이 제한된 아이디입니다. 관리자에게 문의해 주세요.`);");
+                redirectAttributes.addFlashAttribute("info","alert(`이용 규칙 위반에 의하여 이용이 제한된 아이디입니다. \\n 관리자에게 문의해 주세요.`);");
                 return "redirect:/login";
-            }
-            else if(LoginMemberDTO.getLogin_date() == LocalDateTime.now().minusMonths(6)){
-                //비교 로직
-            }
-            else if(LoginMemberDTO.getState().equals("Y")){
-                //로그인일자 확인
-                LoginMemberDTO.setLogin_date(LocalDateTime.now());
             }
             HttpSession session = req.getSession();
             if(loginDTO.getSave_id()!=null){
@@ -124,7 +130,7 @@ public class LoginController {
             //return "redirect:"+uri;
         }
         model.addAttribute("acc_url", uri);
-        model.addAttribute("info","alert(`로그인 실패`);");
+        model.addAttribute("info","alert(`입력하신 아이디 혹은 비밀번호가 일치하지 않습니다.`);");
         return "/login";
     }
 
