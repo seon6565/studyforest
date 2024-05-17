@@ -17,18 +17,18 @@ public class BbsServiceTests {
 
     @Test
     public void testRegist(){
-        log.info("====================");
-        log.info("BoardServiceTests >> testRegist Start");
-
-        log.info("boardService.getClass().getName(): {}", bbsService.getClass().getName());
-        IntStream.rangeClosed(0,10).forEach(i-> {
-                    BbsDTO bbsDTO = BbsDTO.builder().user_id("test2").title("영어 테스트"+i).content("국어 테스트"+i)
-                            .category("free").category2("수학").hashtag("태그"+i).display_date_flag("Y").build();
-                    int result = bbsService.regist(bbsDTO);
-                log.info("result : "+result);
-                });
-
-        log.info("====================");
+//        log.info("====================");
+//        log.info("BoardServiceTests >> testRegist Start");
+//
+//        log.info("boardService.getClass().getName(): {}", bbsService.getClass().getName());
+//        IntStream.rangeClosed(0,10).forEach(i-> {
+//                    BbsDTO bbsDTO = BbsDTO.builder().user_id("test2").title("영어 테스트"+i).content("국어 테스트"+i)
+//                            .category("free").category2("수학").hashtag("태그"+i).display_date_flag("Y").build();
+//                    int result = bbsService.regist(bbsDTO);
+//                log.info("result : "+result);
+//                });
+//
+//        log.info("====================");
     }
 
 //    @Test

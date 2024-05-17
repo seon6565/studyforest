@@ -25,20 +25,20 @@
                             <div class="input-group-text">
                                 <div class="form-check form-switch form-check-inline" >
                                     <label class="form-check-label" for="search_type_0">제목</label>
-                                    <input class="form-check-input" role="switch" type="checkbox" value="t" name="search_type" id="search_type_0" ${search_typeflag_0}>
+                                    <input class="form-check-input" role="switch" type="checkbox" value="t" name="search_type" id="search_type_0" >
                                 </div>
                                 <div class="form-check form-switch form-check-inline" >
                                     <label class="form-check-label" for="search_type_0">내용</label>
-                                    <input class="form-check-input" role="switch" type="checkbox" value="c" name="search_type" id="search_type_1" ${search_typeflag_1}>
+                                    <input class="form-check-input" role="switch" type="checkbox" value="c" name="search_type" id="search_type_1" >
                                 </div>
                             </div>
                             <input class="form-control" type="text" name="search_word" id="search_word" placeholder="검색어" th:value="${pageResponseDTO.search_word}">
                         </div>
                         <div class="input-group mb-1">
-                            <span class="input-group-text">학습 노출 기간</span>
-                            <input type="date" class="form-control" name="search_date1" id="search_date1" placeholder="등록일 시작" >
+                            <span class="input-group-text">등록일</span>
+                            <input type="date" class="form-control" name="reg_date_start" id="reg_date_start" placeholder="등록일 시작" >
                             <span class="input-group-text">~</span>
-                            <input type="date" class="form-control" name="search_date2" id="search_date2" placeholder="등록일 끝" >
+                            <input type="date" class="form-control" name="reg_date_end" id="reg_date_end" placeholder="등록일 끝" >
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-1">
                             <button class="btn btn-outline-primary" type="submit">검색</button>
@@ -49,6 +49,22 @@
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-1">
                     <button class="btn btn-outline-primary" onclick="window.location.href='/member/mybbsregist'">등록하기</button>
                 </div>
+                <div class="d-grid">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-1">
+                        <button class="btn btn-outline-primary" onclick="window.location.href='/member/mystudy?orderby=reg_date'">등록순</button>
+                        <button class="btn btn-outline-primary" onclick="window.location.href='/member/mystudy?orderby=good'">좋아요순</button>
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-1">
+                        <select class="justify-content-md-end" name="page_size" onchange="window.location.href=`/member/mystudy?page_size=${this.value}`">
+                            <option selected>개수</option>
+                            <option value="10">10</option>
+                            <option value="30">30</option>
+                            <option value="50">50</option>
+                            <option value="80">80</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>
+                </div>
                 <table class="table" >
                     <thead>
                     <tr class="table-secondary row">
@@ -56,9 +72,10 @@
                         <th class="col-1 text-truncate">대분류</th>
                         <th class="col-1 text-truncate">중분류</th>
                         <th class="col-4 text-truncate">제목</th>
-                        <th class="col-2 text-truncate">등록일</th>
-                        <th class="col-1 text-truncate">오늘의 학습 노출여부</th>
-                        <th class="col-2 text-truncate">오늘의 학습 노출기간</th>
+                        <th class="col-1 text-truncate">등록일</th>
+                        <th class="col-1 text-truncate">좋아요</th>
+                        <th class="col-1 text-truncate">노출여부</th>
+                        <th class="col-2 text-truncate">노출기간</th>
                     </tr>
                     </thead>
                     <tbody id="tablebody">
@@ -67,7 +84,8 @@
                         <th class="col-1 text-truncate">[[${dto.category}]]</th>
                         <th class="col-1 text-truncate">[[${dto.category2}]]</th>
                         <td class="col-4 text-truncate" ><a th:href="|@{/member/mybbsview(bbsIdx=${dto.bbsIdx},category=${dto.category})}${pageResponseDTO.linkParams}|">[[${dto.title}]]</a></td>
-                        <td class="col-2 text-truncate" >[[${#strings.substring(dto.reg_date,0,10)}]]</td>
+                        <td class="col-1 text-truncate" >[[${#strings.substring(dto.reg_date,0,10)}]]</td>
+                        <td class="col-1 text-truncate" >[[${dto.good}]]</td>
                         <td class="col-1 text-truncate" >[[${dto.display_date_flag}]]</td>
                         <td class="col-2 text-truncate">[[${dto.display_date_start}]] ~ [[${dto.display_date_end}]]</td>
                     </tr>

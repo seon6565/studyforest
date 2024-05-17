@@ -11,6 +11,8 @@ import org.springframework.data.domain.Sort;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Log4j2
 @Data
@@ -41,6 +43,9 @@ public class PageRequestDTO {
     private String category;
     private String category2;
     private String linkParams;
+    private String orderby;
+    private LocalDate reg_date_start;
+    private LocalDate reg_date_end;
 
     public void setTotal_count(int total_count){this.total_count=total_count; }
     public int getPage_skip_count() {return (this.page-1)*this.page_size; }
@@ -68,6 +73,18 @@ public class PageRequestDTO {
                 } catch (UnsupportedEncodingException e) {
 
                 }
+            }
+            if(orderby !=null && !orderby.isEmpty()){
+                sb.append("&orderby="+this.orderby);
+            }
+            if(reg_date_start !=null){
+                sb.append("&reg_date_start="+this.reg_date_start);
+            }
+            if(reg_date_end !=null){
+                sb.append("&reg_date_end="+this.reg_date_end);
+            }
+            if(reg_date_end !=null){
+                sb.append("&page_size="+this.page_size);
             }
             linkParams = sb.toString();
         }

@@ -1,5 +1,6 @@
 package org.fullstack4.studyforest.dto;
 
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -48,7 +49,7 @@ public class MemberDTO {
 
 
     private String temp_password;
-    private String temp_password_validdate;
+    private LocalDateTime temp_password_validdate;
     private int try_check;
     @Builder.Default
     private String state = "Y";
@@ -58,4 +59,5 @@ public class MemberDTO {
     private LocalDateTime ban_date;
     private LocalDateTime leave_date;
     private LocalDateTime password_changedate;
+
 }

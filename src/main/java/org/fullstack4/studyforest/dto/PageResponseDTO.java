@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Log4j2
@@ -27,6 +29,9 @@ public class PageResponseDTO<E> {
     private String category;
     private String category2;
     private String linkParams;
+    private String orderby;
+    private LocalDate reg_date_start;
+    private LocalDate reg_date_end;
 
     private List<E> dtoList;
 
@@ -50,6 +55,9 @@ public class PageResponseDTO<E> {
         this.next_page_flag = (this.total_page >this.page_block_end);
         this.dtoList = dtoList;
         this.linkParams = pageRequestDTO.getLinkParams();
+        this.orderby = pageRequestDTO.getOrderby();
+        this.reg_date_start = pageRequestDTO.getReg_date_start();
+        this.reg_date_end = pageRequestDTO.getReg_date_end();
 
         log.info("pageRequestDTO : " + pageRequestDTO);
         log.info("dtoList : " + dtoList);

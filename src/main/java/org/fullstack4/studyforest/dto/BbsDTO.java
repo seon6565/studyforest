@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 @Builder
 public class BbsDTO {
     private int bbsIdx;
+    private int good;
     private String category;
     private String category2;
     private String hashtag;

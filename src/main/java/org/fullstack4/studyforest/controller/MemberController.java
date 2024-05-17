@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Log4j2
 @Controller
@@ -135,15 +136,6 @@ public class MemberController {
         MemberDTO memberDTO = (MemberDTO) request.getSession().getAttribute("memberDTO");
         memberServiceIf.leave(memberDTO.getMember_idx());
         return "redirect:/logout";
-    }
-    @GetMapping("/searchpwd")
-    public void searchpwd(){
-
-    }
-    @PostMapping("/searchpwd")
-    public String searchpwdPost(){
-
-        return "redirect:/member/changepwd";
     }
 
     @GetMapping("/mypage")

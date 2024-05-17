@@ -10,6 +10,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Log4j2
@@ -76,7 +80,7 @@ public class BbsSearchImpl extends QuerydslRepositorySupport implements BbsSearc
     }
 
     @Override
-    public Page<BbsFreeEntity> searchUserList(Pageable pageable, String[] types, String search_keyword, String category, String category2,String user_id) {
+    public Page<BbsFreeEntity> searchUserList(Pageable pageable, String[] types, String search_keyword, String category, String category2, String user_id, String orderby, LocalDate reg_date_start, LocalDate reg_date_end) {
         if(category.equals("free")) {
             QBbsFreeEntity qBoard = QBbsFreeEntity.bbsFreeEntity;
             JPQLQuery<BbsFreeEntity> query = from(qBoard);
@@ -90,21 +94,23 @@ public class BbsSearchImpl extends QuerydslRepositorySupport implements BbsSearc
             if (category2 != null && category2.length() > 0) {
                 booleanBuilder.and(qBoard.category2.contains(category2));
             }
-            if (types != null && types.length > 1 && search_keyword != null && search_keyword.length() > 0) {
-                for (String type : types) {
-                    switch (type) {
-                        case "t":
-                            booleanBuilder.and(qBoard.title.contains(search_keyword));
-                            break;
-
-                        case "c":
-                            booleanBuilder.or(qBoard.content.contains(search_keyword));
-                            break;
-
-                    }
-                }
+            LocalTime start_time = LocalTime.of(0,0,0);
+            LocalTime end_time = LocalTime.of(23,59,59);
+            if (reg_date_start != null && reg_date_end != null) {
+                LocalDateTime reg_start = LocalDateTime.of(reg_date_start,start_time);
+                LocalDateTime reg_end = LocalDateTime.of(reg_date_end,end_time);
+                booleanBuilder.and(qBoard.reg_date.between(reg_start,reg_end));
             }
-            else if(types != null && types.length == 1 && search_keyword != null && search_keyword.length() > 0) {
+            else if(reg_date_start != null){
+                LocalDateTime reg_start = LocalDateTime.of(reg_date_start,start_time);
+                booleanBuilder.and(qBoard.reg_date.after(reg_start));
+            }
+            else if(reg_date_end != null){
+                LocalDateTime reg_end = LocalDateTime.of(reg_date_end,end_time);
+                booleanBuilder.and(qBoard.reg_date.before(reg_end));
+            }
+
+            if (types != null && types.length > 0 && search_keyword != null && search_keyword.length() > 0) {
                 for (String type : types) {
                     switch (type) {
                         case "t":
@@ -119,7 +125,15 @@ public class BbsSearchImpl extends QuerydslRepositorySupport implements BbsSearc
                 }
             }
             query.where(booleanBuilder);
-            query.orderBy(qBoard.bbsIdx.desc());
+            if(orderby != null && orderby.length() > 0){
+                if(orderby.equals("good")){
+                    query.orderBy(qBoard.good.desc());
+                }else if(orderby.equals("reg_date")) {
+                    query.orderBy(qBoard.reg_date.desc());
+                }
+            }else {
+                query.orderBy(qBoard.bbsIdx.desc());
+            }
             this.getQuerydsl().applyPagination(pageable, query);
             log.info("keyword query : {}", query);
             List<BbsFreeEntity> boards = query.fetch();

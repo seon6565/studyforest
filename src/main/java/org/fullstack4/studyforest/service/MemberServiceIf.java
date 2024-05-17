@@ -16,4 +16,7 @@ public interface MemberServiceIf {
     void inactiveState(MemberDTO memberDTO);
     void banState(MemberDTO memberDTO);
     void loginState(MemberDTO memberDTO);
+
+    void searchPwd(MemberDTO memberDTO);
+    MemberDTO modifySearchPassword(MemberDTO memberDTO);
 }

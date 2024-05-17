@@ -68,6 +68,19 @@ public class MemberServiceImpl implements MemberServiceIf{
         memberDTO = modelMapper.map(memberEntity,MemberDTO.class);
         return memberDTO;
     }
+    @Override
+    public MemberDTO modifySearchPassword(MemberDTO memberDTO) {
+        Optional<MemberEntity> result = memberRepository.findById(memberDTO.getMember_idx());
+        MemberEntity memberEntity = result.orElse(null);
+        if(memberEntity!=null&& memberEntity.getTemp_password().equals(memberDTO.getTemp_password())) {
+            memberEntity.modifyPassword(
+                    memberDTO.getPassword()
+            );
+            memberRepository.save(memberEntity);
+        }
+        memberDTO = modelMapper.map(memberEntity,MemberDTO.class);
+        return memberDTO;
+    }
 
     @Override
     public void leave(int idx) {
@@ -110,5 +123,10 @@ public class MemberServiceImpl implements MemberServiceIf{
         memberRepository.save(memberEntity);
     }
 
-
+    @Override
+    public void searchPwd(MemberDTO memberDTO) {
+        MemberEntity memberEntity = modelMapper.map(memberDTO, MemberEntity.class);
+        memberEntity.searchPassword(memberDTO.getTemp_password());
+            memberRepository.save(memberEntity);
+    }
 }

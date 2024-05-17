@@ -13,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -88,30 +90,12 @@ public class BbsServiceImpl implements BbsServiceIf {
 
         }
         else if(category.equals("computer")) {
-            Page<BbsFreeEntity> result = bbsFreeRepository.search(pageable, types, search_word, category, category2);
-            List<BbsDTO> dtoList = result.getContent().stream()
-                    .map(board->modelMapper.map(board,BbsDTO.class))
-                    .collect(Collectors.toList());
-            return PageResponseDTO.<BbsDTO>withAll().pageRequestDTO(pageRequestDTO)
-                    .dtoList(dtoList).total_count((int)result.getTotalElements()).build();
 
         }
-        if(category.equals("cook")) {
-            Page<BbsFreeEntity> result = bbsFreeRepository.search(pageable, types, search_word, category, category2);
-            List<BbsDTO> dtoList = result.getContent().stream()
-                    .map(board->modelMapper.map(board,BbsDTO.class))
-                    .collect(Collectors.toList());
-            return PageResponseDTO.<BbsDTO>withAll().pageRequestDTO(pageRequestDTO)
-                    .dtoList(dtoList).total_count((int)result.getTotalElements()).build();
+        else if(category.equals("cook")) {
 
         }
-        else if(category.equals("all")) {
-            Page<BbsFreeEntity> result = bbsFreeRepository.search(pageable, types, search_word, category, category2);
-            List<BbsDTO> dtoList = result.getContent().stream()
-                    .map(board->modelMapper.map(board,BbsDTO.class))
-                    .collect(Collectors.toList());
-            return PageResponseDTO.<BbsDTO>withAll().pageRequestDTO(pageRequestDTO)
-                    .dtoList(dtoList).total_count((int)result.getTotalElements()).build();
+        else {
 
         }
         return null;
@@ -122,9 +106,12 @@ public class BbsServiceImpl implements BbsServiceIf {
         String search_word = pageRequestDTO.getSearch_word();
         String category = pageRequestDTO.getCategory();
         String category2 = pageRequestDTO.getCategory2();
+        String orderby = pageRequestDTO.getOrderby();
+        LocalDate reg_date_start = pageRequestDTO.getReg_date_start();
+        LocalDate reg_date_end = pageRequestDTO.getReg_date_end();
         PageRequest pageable = pageRequestDTO.getPageable();
         if(category.equals("free")) {
-            Page<BbsFreeEntity> result = bbsFreeRepository.searchUserList(pageable, types, search_word, category, category2,user_id);
+            Page<BbsFreeEntity> result = bbsFreeRepository.searchUserList(pageable, types, search_word, category, category2,user_id,orderby,reg_date_start,reg_date_end);
             List<BbsDTO> dtoList = result.getContent().stream()
                     .map(board->modelMapper.map(board,BbsDTO.class))
                     .collect(Collectors.toList());
@@ -133,30 +120,12 @@ public class BbsServiceImpl implements BbsServiceIf {
 
         }
         else if(category.equals("computer")) {
-            Page<BbsFreeEntity> result = bbsFreeRepository.searchUserList(pageable, types, search_word, category, category2,user_id);
-            List<BbsDTO> dtoList = result.getContent().stream()
-                    .map(board->modelMapper.map(board,BbsDTO.class))
-                    .collect(Collectors.toList());
-            return PageResponseDTO.<BbsDTO>withAll().pageRequestDTO(pageRequestDTO)
-                    .dtoList(dtoList).total_count((int)result.getTotalElements()).build();
 
         }
-        if(category.equals("cook")) {
-            Page<BbsFreeEntity> result = bbsFreeRepository.searchUserList(pageable, types, search_word, category, category2,user_id);
-            List<BbsDTO> dtoList = result.getContent().stream()
-                    .map(board->modelMapper.map(board,BbsDTO.class))
-                    .collect(Collectors.toList());
-            return PageResponseDTO.<BbsDTO>withAll().pageRequestDTO(pageRequestDTO)
-                    .dtoList(dtoList).total_count((int)result.getTotalElements()).build();
+        else if(category.equals("cook")) {
 
         }
-        else if(category.equals("all")) {
-            Page<BbsFreeEntity> result = bbsFreeRepository.searchUserList(pageable, types, search_word, category, category2,user_id);
-            List<BbsDTO> dtoList = result.getContent().stream()
-                    .map(board->modelMapper.map(board,BbsDTO.class))
-                    .collect(Collectors.toList());
-            return PageResponseDTO.<BbsDTO>withAll().pageRequestDTO(pageRequestDTO)
-                    .dtoList(dtoList).total_count((int)result.getTotalElements()).build();
+        else {
 
         }
         return null;

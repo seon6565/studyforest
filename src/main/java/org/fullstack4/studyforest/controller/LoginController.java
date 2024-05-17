@@ -13,12 +13,12 @@ import org.fullstack4.studyforest.service.MemberServiceIf;
 import org.fullstack4.studyforest.util.CommonUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @Log4j2
@@ -188,5 +188,55 @@ public class LoginController {
             return "redirect:/login";
         }
         return "redirect:/member/view";
+    }
+
+    @GetMapping("/searchpwd")
+    public void searchpwd(){
+
+    }
+    @PostMapping("/searchpwd")
+    public String searchpwdPost(String user_id, RedirectAttributes redirectAttributes){
+        int count = 0;
+        if(memberServiceIf.idCheck(user_id) >0){
+            count = memberServiceIf.idCheck(user_id);
+        }
+        if(count > 0) {
+            UUID uuid = UUID.randomUUID();
+            String tempPwd = uuid.toString().substring(0,10);
+            MemberDTO memberDTO = loginServiceIf.cookieLogin(user_id);
+            memberDTO.setTemp_password(tempPwd);
+            memberServiceIf.searchPwd(memberDTO);
+            //이메일 전송로직
+            return "redirect:/modifysearchpwd";
+        }else {
+            redirectAttributes.addFlashAttribute("info","alert(`해당 ID가 존재하지 않습니다.`);");
+            return "redirect:/searchpwd";
+        }
+
+    }
+    @GetMapping("/modifysearchpwd")
+    public void modifysearchpwd(){
+
+    }
+
+    @PostMapping("/modifysearchpwd")
+    public String modifysearchpwdPost(MemberDTO memberDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        if(!memberDTO.getPassword().matches("^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,20}$")){
+            redirectAttributes.addFlashAttribute("info","alert(`비밀번호를 조건에 맞게 입력해주세요.`);");
+            return "redirect:/modifysearchpwd";
+        }
+        MemberDTO loginMember = loginServiceIf.cookieLogin(memberDTO.getUserId());
+        if(loginMember.getTemp_password_validdate().isBefore(LocalDateTime.now().minusHours(1))){
+            redirectAttributes.addFlashAttribute("info2","alert(`임시 비밀번호 발급 1시간이 지났습니다. \\n 임시 비밀번호를 다시 발급받아 주세요.`);");
+            return "redirect:/searchpwd";
+        }
+        else if(loginMember.getTemp_password().equals(memberDTO.getTemp_password())) {
+            loginMember.setPassword(commonUtil.encryptPwd(memberDTO.getPassword()));
+            memberServiceIf.modifySearchPassword(loginMember);
+            redirectAttributes.addFlashAttribute("info", "alert(`비밀번호 변경 성공`);");
+            return "redirect:/login";
+        }
+        redirectAttributes.addFlashAttribute("info", "alert(`비밀번호 변경 실패`);");
+        return "redirect:/modifysearchpwd";
     }
 }

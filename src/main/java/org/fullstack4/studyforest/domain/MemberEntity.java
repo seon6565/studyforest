@@ -69,6 +69,7 @@ public class MemberEntity {
     private LocalDateTime ban_date;
     private LocalDateTime leave_date;
 
+
     public void modify(String email, String phone, LocalDate birthday, String addr1, String addr2, String addr_number){
         this.email = email;
         this.phone = phone;
@@ -83,6 +84,10 @@ public class MemberEntity {
         this.password_changedate = LocalDateTime.now();
         this.temp_password = null;
         this.temp_password_validdate = null;
+    }
+    public void searchPassword(String temp_password){
+        this.temp_password = temp_password;
+        this.temp_password_validdate = LocalDateTime.now();
     }
 
     public void leave(){

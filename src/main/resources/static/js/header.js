@@ -2,7 +2,7 @@ function header(){
     document.write(`<nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid" >
         <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-            <img src="/img/github.png" width="40" height="32" class="bi me-2">
+            <img src="/img/tree.svg" width="40" height="32" class="bi me-2">
             <span class="fs-4">Study Forest</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

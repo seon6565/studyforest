@@ -9,11 +9,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @MappedSuperclass
 @EntityListeners(value = {AuditingEntityListener.class})
 public abstract class BbsEntity {
+    @Column(length = 6)
+    private Integer good;
     @Column(length = 20, nullable = false)
     private String category;
     @Column(length = 50, nullable = false)

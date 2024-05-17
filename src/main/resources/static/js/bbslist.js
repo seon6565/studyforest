@@ -1,6 +1,7 @@
 function bbsList(parentdivid,servletUrl,category,pagingParameter){
     let parentdiv = document.getElementById(parentdivid);
     parentdiv.innerHTML = ``;
+
     parentdiv.innerHTML += `<div id="bbssearch">
         <form name="frmSearch" id="search" action="/bbs/list/free">
             <div class="input-group mb-1">
@@ -24,20 +25,21 @@ function bbsList(parentdivid,servletUrl,category,pagingParameter){
                 <input type="date" class="form-control" name="search_date2" id="search_date2" placeholder="등록일 끝" >
             </div>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-1">
-                <button class="btn btn-outline-primary" type="submit">검색</button>
-                <button class="btn btn-outline-primary" type="reset" onclick="bbsList('maincontent','/bbs/list','${category}')">검색 초기화</button>
+                <button class="btn btn-outline-primary" type="button" onclick="bbsList('maincontent','/bbs/list','${category}','${pagingParameter}')">검색</button>
+                <button class="btn btn-outline-primary" type="reset" onclick="bbsList('maincontent','/bbs/list','${category}','?page=1')">검색 초기화</button>
             </div>
         </form>
     </div>`;
+
     parentdiv.innerHTML += `<div id="table">
         <table class="table" >
             <thead>
             <tr class="table-secondary row">
                 <th class="col-1 text-truncate">No</th>
                 <th class="col-1 text-truncate">카테고리</th>
-                <th class="col-8 text-truncate">제목</th>
+                <th class="col-7 text-truncate">제목</th>
                 <th class="col-1 text-truncate">작성자</th>
-                <th class="col-1 text-truncate">등록일</th>
+                <th class="col-2 text-truncate text-center">등록일</th>
             </tr>
             </thead>
             <tbody id="tablebody">
@@ -63,11 +65,12 @@ function bbsList(parentdivid,servletUrl,category,pagingParameter){
                 tablebody.innerHTML += `<tr class="row">
                     <td class="col-1 text-truncate" id="user_id${i}">${result.dtoList[i].bbsIdx}</td>
                     <td class="col-1 text-truncate" id="user_id${i}">${result.dtoList[i].category2}</td>
-                    <td class="col-8 text-truncate" id="title${i}">
+                    <td class="col-7 text-truncate" id="title${i}">
                         <a href="/">${result.dtoList[i].title}</a>
                     </td>
                     <td class="col-1 text-truncate" id="user_id${i}">${result.dtoList[i].user_id}</td>
-                    <td class="col-1 text-truncate" id="category${i}">${result.dtoList[i].reg_date}</td>
+                    
+                    <td class="col-2 text-truncate text-center" id="category${i}">${result.dtoList[i].reg_date.toString().substring(0, 10)}</td>
                 </tr>`;
             }
             if(result.prev_page_flag==true){
