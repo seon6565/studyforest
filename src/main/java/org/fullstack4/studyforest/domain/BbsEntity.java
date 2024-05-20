@@ -50,4 +50,8 @@ public abstract class BbsEntity {
         this.display_date_end = display_date_end;
         this.modify_date= LocalDateTime.now();
     }
+
+    public void modifyGood(int good){
+        this.good = good;
+    }
 }

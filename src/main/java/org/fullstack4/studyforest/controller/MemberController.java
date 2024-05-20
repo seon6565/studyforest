@@ -5,24 +5,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.fullstack4.studyforest.dto.BbsDTO;
-import org.fullstack4.studyforest.dto.MemberDTO;
-import org.fullstack4.studyforest.dto.PageRequestDTO;
-import org.fullstack4.studyforest.dto.PageResponseDTO;
+import org.fullstack4.studyforest.dto.*;
 import org.fullstack4.studyforest.service.BbsServiceIf;
 import org.fullstack4.studyforest.service.MemberServiceIf;
+import org.fullstack4.studyforest.util.CommonFileUtil;
 import org.fullstack4.studyforest.util.CommonUtil;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Log4j2
@@ -33,6 +30,7 @@ public class MemberController {
     private final MemberServiceIf memberServiceIf;
     private final BbsServiceIf bbsServiceIf;
     private final CommonUtil commonUtil;
+    private final CommonFileUtil commonFileUtil;
     @GetMapping("/view")
     public void view(){
     }
@@ -143,34 +141,74 @@ public class MemberController {
     }
 
     @GetMapping("/mybbsview")
-    public void view(BbsDTO bbsDTO, PageRequestDTO pageRequestDTO, Model model){
+    public void view(BbsDTO bbsDTO, PageRequestDTO pageRequestDTO, Model model, HttpServletRequest request){
         BbsDTO resultbbsDTO = bbsServiceIf.view(bbsDTO);
+        List<BbsShareDTO> bbsShareDTOList = bbsServiceIf.listShare(bbsDTO.getBbsIdx());
+        MemberDTO memberDTO = (MemberDTO) request.getSession().getAttribute("memberDTO");
+        BbsFileDTO fileDTO = bbsServiceIf.viewFile(bbsDTO.getBbsIdx());
+        fileDTO.setDirectory(fileDTO.getDirectory().replace("D:\\java4\\studyforest\\studyforest\\src\\main\\resources\\static\\img\\upload","/img/upload/"));
+        if(memberDTO != null) {
+            BbsGoodDTO bbsGoodDTO = BbsGoodDTO.builder().bbsIdx(bbsDTO.getBbsIdx()).userId(memberDTO.getUserId()).build();
+            BbsGoodDTO resultDTO = bbsServiceIf.viewGood(bbsGoodDTO);
+            model.addAttribute("bbsGoodDTO",resultDTO);
+        }
+        model.addAttribute("linkParam","?page="+pageRequestDTO.getPage()+pageRequestDTO.getLinkParams());
+        model.addAttribute("bbsShareDTO",bbsShareDTOList);
         model.addAttribute("bbsDTO",resultbbsDTO);
+        model.addAttribute("fileDTO",fileDTO);
     }
 
     @GetMapping("/mybbsregist")
     public void regist(BbsDTO bbsDTO, PageRequestDTO pageRequestDTO, Model model){
     }
-
     @PostMapping("/mybbsregist")
-    public String registPost(BbsDTO bbsDTO, PageRequestDTO pageRequestDTO, Model model){
-        bbsServiceIf.regist(bbsDTO);
+    public String registPost(BbsDTO bbsDTO, PageRequestDTO pageRequestDTO, Model model, MultipartHttpServletRequest files){
+        int resultidx = bbsServiceIf.regist(bbsDTO);
+        String saveDirectory = "D:\\java4\\studyforest\\studyforest\\src\\main\\resources\\static\\img\\upload";
+        List<String> filenames = null;
+        filenames = commonFileUtil.fileuploads(files,saveDirectory);;
+            if(filenames!=null) {
+                for (String filename : filenames) {
+                    BbsFileDTO bbsFileDTO = BbsFileDTO.builder().bbsIdx(resultidx).category(bbsDTO.getCategory()).directory(saveDirectory)
+                            .fileName(filename).userId(bbsDTO.getUser_id()).build();
+                    bbsServiceIf.registFile(bbsFileDTO);
+                }
+            }
         return "redirect:/member/mystudy";
     }
     @GetMapping("/mybbsmodify")
     public void modifyGet(BbsDTO bbsDTO, PageRequestDTO pageRequestDTO, Model model){
         BbsDTO viewDTO = bbsServiceIf.view(bbsDTO);
+        BbsFileDTO fileDTO = bbsServiceIf.viewFile(bbsDTO.getBbsIdx());
         model.addAttribute("bbsDTO",viewDTO);
+        model.addAttribute("fileDTO",fileDTO);
     }
     @PostMapping("/mybbsmodify")
-    public String modifyPost(BbsDTO bbsDTO, Model model){
+    public String modifyPost(BbsDTO bbsDTO, Model model, MultipartHttpServletRequest files){
         bbsServiceIf.modify(bbsDTO);
+        BbsFileDTO bbsFileDTO = bbsServiceIf.viewFile(bbsDTO.getBbsIdx());
+        String saveDirectory = "D:\\java4\\studyforest\\studyforest\\src\\main\\resources\\static\\img\\upload";
+        List<String> filenames = null;
+        filenames = commonFileUtil.fileuploads(files,saveDirectory);;
+        if(filenames!=null) {
+            commonFileUtil.fileDelite(bbsFileDTO.getDirectory(),bbsFileDTO.getFileName());
+
+            for (String filename : filenames) {
+                bbsServiceIf.deleteFile(bbsFileDTO);
+                BbsFileDTO bbsFileDTO2 = BbsFileDTO.builder().bbsIdx(bbsDTO.getBbsIdx()).category(bbsDTO.getCategory()).directory(saveDirectory)
+                        .fileName(filename).userId(bbsDTO.getUser_id()).build();
+                bbsServiceIf.registFile(bbsFileDTO2);
+            }
+        }
         return "redirect:/member/mybbsview?bbsIdx="+bbsDTO.getBbsIdx()+"&category="+bbsDTO.getCategory();
     }
 
     @GetMapping("/mybbsdelete")
     public String delete(BbsDTO bbsDTO, Model model){
         bbsServiceIf.delete(bbsDTO);
+        BbsFileDTO bbsFileDTO = bbsServiceIf.viewFile(bbsDTO.getBbsIdx());
+        commonFileUtil.fileDelite(bbsFileDTO.getDirectory(),bbsFileDTO.getFileName());
+        bbsServiceIf.deleteFile(bbsFileDTO);
         return "redirect:/member/mystudy";
     }
 
@@ -180,13 +218,54 @@ public class MemberController {
         String user_id = memberDTO.getUserId();
         pageRequestDTO.setCategory("free");
         PageResponseDTO<BbsDTO> pageResponseDTO = bbsServiceIf.listUser(pageRequestDTO,user_id);
-        log.info("pageResponseDTO test : " + pageResponseDTO);
         model.addAttribute("pageResponseDTO" , pageResponseDTO);
 
     }
 
     @GetMapping("/myshare")
-    public void myshare(){
+    public void listshare(Model model,HttpServletRequest request, BbsShareDTO bbsShareDTO){
+        MemberDTO memberDTO = (MemberDTO) request.getSession().getAttribute("memberDTO");
+        String userId = memberDTO.getUserId();
+        if(bbsShareDTO.getToUserId()!=null) {
+            List<BbsShareDTO> bbsShareDTOList = bbsServiceIf.listShareToUserId(bbsShareDTO.getToUserId());
+            model.addAttribute("bbsShareDTO",bbsShareDTOList);
+        }
+        else {
+            List<BbsShareDTO> bbsShareDTOList = bbsServiceIf.listShareUserId(userId);
+            model.addAttribute("bbsShareDTO", bbsShareDTOList);
+        }
+    }
 
+
+    @PostMapping("/shareregist")
+    public String regist(BbsShareDTO bbsShareDTO){
+        bbsServiceIf.registShare(bbsShareDTO);
+        return "redirect:/member/mybbsview?bbsIdx="+bbsShareDTO.getBbsIdx()+"&category="+bbsShareDTO.getCategory();
+    }
+
+    @GetMapping("/sharedelete")
+    public String delete(BbsShareDTO bbsShareDTO){
+        bbsServiceIf.deleteShare(bbsShareDTO);
+        return "redirect:/member/myshare";
+    }
+
+    @GetMapping("/goodregist")
+    public String registgood(BbsGoodDTO bbsGoodDTO){
+        bbsServiceIf.registGood(bbsGoodDTO);
+        return "redirect:/member/mybbsview?bbsIdx="+bbsGoodDTO.getBbsIdx()+"&category="+bbsGoodDTO.getCategory();
+    }
+
+    @GetMapping("/gooddelete")
+    public String deletegood(BbsGoodDTO bbsGoodDTO){
+        bbsServiceIf.deleteGood(bbsGoodDTO);
+        return "redirect:/member/mygood";
+    }
+
+    @GetMapping("/mygood")
+    public void listgood(Model model,HttpServletRequest request, BbsGoodDTO bbsGoodDTO){
+        MemberDTO memberDTO = (MemberDTO) request.getSession().getAttribute("memberDTO");
+        String userId = memberDTO.getUserId();
+        List<BbsGoodDTO> bbsGoodDTOList = bbsServiceIf.listGood(userId);
+        model.addAttribute("bbsGoodDTO", bbsGoodDTOList);
     }
 }

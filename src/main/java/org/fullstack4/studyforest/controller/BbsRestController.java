@@ -6,10 +6,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.fullstack4.studyforest.domain.BbsFreeEntity;
-import org.fullstack4.studyforest.dto.BbsDTO;
-import org.fullstack4.studyforest.dto.MemberDTO;
-import org.fullstack4.studyforest.dto.PageRequestDTO;
-import org.fullstack4.studyforest.dto.PageResponseDTO;
+import org.fullstack4.studyforest.dto.*;
 import org.fullstack4.studyforest.repository.BbsFreeRepository;
 import org.fullstack4.studyforest.service.BbsServiceIf;
 import org.springframework.data.domain.Page;
@@ -19,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.swagger.v3.oas.annotations.media.Schema.AccessMode.READ_ONLY;
@@ -85,4 +83,5 @@ public class BbsRestController {
         return "idx번호 : "+idx+" 삭제 성공";
 
     }
+
 }

@@ -23,7 +23,7 @@
                     <button class="btn btn-outline-primary" type="button" onclick="location.href='/member/mystudy'">나의 학습</button>
                     <button class="btn btn-outline-primary" type="button" onclick="location.href='/member/myshare'">공유 학습</button>
                 </div>
-                <form action="/member/mybbsregist" method="post" name="mybbsregist" id="mybbsregist">
+                <form action="/member/mybbsregist" method="post" name="mybbsregist" id="mybbsregist" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="category" class="form-label">대분류</label>
                         <input type="text" class="form-control" name="category" id="category" th:value="${bbsDTO.category}" maxlength="30">
@@ -59,20 +59,24 @@
                         <input type="text" class="form-control" name="hashtag" id="hashtag" th:value="${bbsDTO.hashtag}" maxlength="30">
                         <div id="div_err_hashtag" style="display:none"></div>
                     </div>
-                    <div class="mb-3">
-                        <label for="display_date_flag" class="form-label">디스플레이 여부</label>
-                        <input type="radio" class="form-control" name="display_date_flag" id="display_date_flag" value="Y">노출
-                        <input type="radio" class="form-control" name="display_date_flag" id="display_date_flag1" value="N">노출안함
-                        <div id="div_err_display_date_flag" style="display:none"></div>
+                    <div class="mb-3">디스플레이 노출 여부
+                        <div class="form-check">
+                            <label for="display_date_flag" class="form-label" >노출</label>
+                            <input type="radio" class="form-check-input" name="display_date_flag" id="display_date_flag" value="Y" checked>
+                        </div>
+                        <div class="form-check">
+                            <label for="display_date_flag1" class="form-label">노출안함</label>
+                            <input type="radio" class="form-check-input" name="display_date_flag" id="display_date_flag1" value="N">
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="display_date_start" class="form-label">디스플레이 시작일</label>
-                        <input type="text" class="form-control" name="display_date_start" id="display_date_start" th:value="${bbsDTO.display_date_start}" maxlength="1">
+                        <input type="date" class="form-control" name="display_date_start" id="display_date_start" th:value="${bbsDTO.display_date_start}" maxlength="1">
                         <div id="div_err_display_date_start" style="display:none"></div>
                     </div>
                     <div class="mb-3">
                         <label for="display_date_end" class="form-label">디스플레이 종료일</label>
-                        <input type="text" class="form-control" name="display_date_end" id="display_date_end" th:value="${bbsDTO.display_date_end}" maxlength="1">
+                        <input type="date" class="form-control" name="display_date_end" id="display_date_end" th:value="${bbsDTO.display_date_end}" maxlength="1">
                         <div id="div_err_display_date_end" style="display:none"></div>
                     </div>
 

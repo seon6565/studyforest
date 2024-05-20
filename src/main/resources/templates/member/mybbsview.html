@@ -41,11 +41,11 @@
                 </div>
                 <div class="mb-3">
                     이미지
-                    <textarea rows="10" cols="60" style="resize: none;" class="form-control">[[${bbsDTO.content}]] </textarea>
+                    <img th:src="|${fileDTO.directory+fileDTO.fileName}|">
                 </div>
                 <div class="mb-3">
                     내용
-                    <textarea rows="10" cols="60" style="resize: none;" class="form-control"> </textarea>
+                    <textarea rows="10" cols="60" style="resize: none;" class="form-control">[[${bbsDTO.content}]] </textarea>
                 </div>
                 <div class="mb-3">
                     등록일
@@ -65,24 +65,52 @@
                 </div>
                 <div class="mb-3">
                     공유한사람
-                    <span class="form-control"></span>
+                    <table class="table">
+                        <thead>
+                        <tr class="table-secondary row">
+                            <th class="col-6 text-truncate">toUserId</th>
+                            <th class="col-5 text-truncate">reg_date</th>
+                            <th class="col-1 text-truncate">삭제</th>
+                        </tr>
+                        <tbody id="tablebody" th:if="${bbsShareDTO != null}">
+                        <tr class="row" th:each="dto:${bbsShareDTO}">
+                            <td class="col-6 text-truncate" >[[${dto.toUserId}]]</td>
+                            <th class="col-5 text-truncate">[[${dto.reg_date}]]</th>
+                            <td class="col-1 text-truncate" ><a th:href="|@{/member/sharedelete(shareIdx=${dto.shareIdx},bbsIdx=${dto.bbsIdx},category=${dto.category})}|" onclick="goDelete()">X</a></td>
+                        </tr>
+                        <tbody id="tablebody2" th:if="${bbsShareDTO == null}">
+                        <tr class="row" th:each="dto:${bbsShareDTO}">
+                            <td class="col-12 text-truncate" >존재하지 않습니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="mb-3">
-                    공유하기
-                    <span class="form-control"></span>
+                    <span class="form-control">공유하기</span>
+                    <form action="/member/shareregist" method="post" id="share" name="share">
+                        <input type="hidden" name="category" id="category" th:value="${bbsDTO.category}">
+                        <input type="hidden" name="bbsIdx" id="bbsIdx" th:value="${bbsDTO.bbsIdx}">
+                        <input type="hidden" name="userId" id="userId" th:value="${session.memberDTO.userId}">
+                        <input type="hidden" name="title" id="title" th:value="${bbsDTO.title}">
+                        <input type="text" placeholder="공유할아이디" name="toUserId" id="toUserId">
+                        <button>공유하기</button>
+                    </form>
                 </div>
                 <div class="mb-3">
                     해쉬태그
-                    <span class="form-control"></span>
+                    <span class="form-control">[[${bbsDTO.hashtag}]]</span>
                 </div>
                 <div class="mb-3">
-                    좋아요
-                    <span class="form-control"></span>
+                    좋아요 회수
+                    <span class="form-control">[[${bbsDTO.good}]]</span>
                 </div>
-
-
-
+                <div class="mb-3">
+                    좋아요 버튼
+                    <a th:if="${bbsGoodDTO == null}" th:href="|@{/member/goodregist(bbsIdx=${bbsDTO.bbsIdx},category=${bbsDTO.category},title=${bbsDTO.title},userId=${session.memberDTO.userId})}|"><img th:if="${bbsGoodDTO == null}" src="/img/star.svg" class="img-fluid"></a>
+                    <a th:if="${bbsGoodDTO != null}" th:href="|@{/member/gooddelete(goodIdx=${bbsGoodDTO.goodIdx},bbsIdx=${bbsGoodDTO.bbsIdx},category=${bbsGoodDTO.category})}|"><img th:if="${bbsGoodDTO != null}" src="/img/starfill.svg" class="img-fluid" ></a>
+                </div>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a class="btn btn-outline-primary" type="button" th:href="|@{/member/mystudy}${linkParam}|">목록</a>
                     <a class="btn btn-outline-primary" type="button" th:href="|@{/member/mybbsmodify(bbsIdx=${bbsDTO.bbsIdx},category=${bbsDTO.category})}|">글수정</a>
                     <a class="btn btn-outline-primary" type="button" onclick="goDelete()" th:href="|@{/member/mybbsdelete(bbsIdx=${bbsDTO.bbsIdx},category=${bbsDTO.category})}|">글삭제</a>
                 </div>

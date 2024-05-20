@@ -51,8 +51,8 @@
                 </div>
                 <div class="d-grid">
                     <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-1">
-                        <button class="btn btn-outline-primary" onclick="window.location.href='/member/mystudy?orderby=reg_date'">등록순</button>
-                        <button class="btn btn-outline-primary" onclick="window.location.href='/member/mystudy?orderby=good'">좋아요순</button>
+                        <a class="btn btn-outline-primary" th:href="|@{/member/mystudy(orderby=reg_date)}${pageResponseDTO.linkParams}|">등록순</a>
+                        <a class="btn btn-outline-primary" th:href="|@{/member/mystudy(orderby=good)}${pageResponseDTO.linkParams}|">좋아요순</a>
                     </div>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-1">
                         <select class="justify-content-md-end" name="page_size" onchange="window.location.href=`/member/mystudy?page_size=${this.value}`">
@@ -83,7 +83,7 @@
                         <td class="col-1 text-truncate" >[[${dto.BbsIdx}]]</td>
                         <th class="col-1 text-truncate">[[${dto.category}]]</th>
                         <th class="col-1 text-truncate">[[${dto.category2}]]</th>
-                        <td class="col-4 text-truncate" ><a th:href="|@{/member/mybbsview(bbsIdx=${dto.bbsIdx},category=${dto.category})}${pageResponseDTO.linkParams}|">[[${dto.title}]]</a></td>
+                        <td class="col-4 text-truncate" ><a th:href="|@{/member/mybbsview(page=${pageResponseDTO.page},bbsIdx=${dto.bbsIdx},category=${dto.category})}${pageResponseDTO.linkParams}|">[[${dto.title}]]</a></td>
                         <td class="col-1 text-truncate" >[[${#strings.substring(dto.reg_date,0,10)}]]</td>
                         <td class="col-1 text-truncate" >[[${dto.good}]]</td>
                         <td class="col-1 text-truncate" >[[${dto.display_date_flag}]]</td>

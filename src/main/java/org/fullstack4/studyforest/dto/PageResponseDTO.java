@@ -54,10 +54,10 @@ public class PageResponseDTO<E> {
         this.prev_page_flag = (this.page_block_start > 1);
         this.next_page_flag = (this.total_page >this.page_block_end);
         this.dtoList = dtoList;
-        this.linkParams = pageRequestDTO.getLinkParams();
         this.orderby = pageRequestDTO.getOrderby();
         this.reg_date_start = pageRequestDTO.getReg_date_start();
         this.reg_date_end = pageRequestDTO.getReg_date_end();
+        this.linkParams = pageRequestDTO.getLinkParams();
 
         log.info("pageRequestDTO : " + pageRequestDTO);
         log.info("dtoList : " + dtoList);

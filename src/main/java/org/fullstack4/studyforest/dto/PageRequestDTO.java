@@ -56,6 +56,12 @@ public class PageRequestDTO {
         }
         return search_type.split(",");
     }
+    public String getOrderby(){
+        if(orderby == null || orderby.isEmpty()){
+            return null;
+        }
+        return orderby.split(",")[0];
+    }
     public PageRequest getPageable(String...props){
         return PageRequest.of(this.page-1,this.page_size, Sort.by(props).descending());
     }
@@ -74,17 +80,15 @@ public class PageRequestDTO {
 
                 }
             }
-            if(orderby !=null && !orderby.isEmpty()){
-                sb.append("&orderby="+this.orderby);
+            if(orderby !=null && !orderby.isEmpty())
+            {
+                sb.append("&orderby=" + getOrderby());
             }
             if(reg_date_start !=null){
                 sb.append("&reg_date_start="+this.reg_date_start);
             }
             if(reg_date_end !=null){
                 sb.append("&reg_date_end="+this.reg_date_end);
-            }
-            if(reg_date_end !=null){
-                sb.append("&page_size="+this.page_size);
             }
             linkParams = sb.toString();
         }
