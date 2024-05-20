@@ -3,5 +3,70 @@
       layout:decorate="~{common/common.html}">
 
 <div layout:fragment="content">
-<h1>마이페이지 미구현</h1>
+    <div class="container">
+        <header class="py-3">
+            <div class="container px-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-xxl-6">
+                        <div class="text-center my-5">
+                            <h1 class="fw-bolder mb-3">마이페이지</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="card">
+            <div class="card-body p-4">
+                <div>
+                    <input type="date" th:value="${pageResponseDTO.reg_date_end}" class="form-control" onchange="window.location.href=`/member/mypage?reg_date_end=${this.value}&page_size=1`">
+                </div>
+                <table class="table" >
+                    <thead>
+                    <tr class="table-secondary row">
+                        <th class="col-1 text-truncate">No</th>
+                        <th class="col-1 text-truncate">대분류</th>
+                        <th class="col-1 text-truncate">중분류</th>
+                        <th class="col-4 text-truncate">제목</th>
+                        <th class="col-1 text-truncate">등록일</th>
+                        <th class="col-1 text-truncate">좋아요</th>
+                        <th class="col-1 text-truncate">노출여부</th>
+                        <th class="col-2 text-truncate">등록일</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="tablebody">
+                    <tr class="row" th:each="dto:${pageResponseDTO.dtoList}">
+                        <td class="col-1 text-truncate" >[[${dto.BbsIdx}]]</td>
+                        <th class="col-1 text-truncate">[[${dto.category}]]</th>
+                        <th class="col-1 text-truncate">[[${dto.category2}]]</th>
+                        <td class="col-4 text-truncate" ><a th:href="|@{/member/mybbsview(page=${pageResponseDTO.page},bbsIdx=${dto.bbsIdx},category=${dto.category})}${pageResponseDTO.linkParams}|">[[${dto.title}]]</a></td>
+                        <td class="col-1 text-truncate" >[[${#strings.substring(dto.reg_date,0,10)}]]</td>
+                        <td class="col-1 text-truncate" >[[${dto.good}]]</td>
+                        <td class="col-1 text-truncate" >[[${dto.display_date_flag}]]</td>
+                        <td class="col-2 text-truncate">[[${#strings.substring(dto.reg_date,0,10)}]]</td>
+                    </tr>
+                    <tr class="row" th:if="${pageResponseDTO.total_count}==0">
+                        <td class="col-12 text-truncate" >등록된 글이 없습니다.</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="float-end">
+                    <ul class="pagination flex-wrap">
+                        <li class="page-item" th:if="${pageResponseDTO.prev_page_flag}">
+                            <a th:href="|@{/member/mypage(page=${pageResponseDTO.page_block_start -10})}${pageResponseDTO.linkParams}|" class="page-link" th:data-num="${pageResponseDTO.page_block_start -10}">Previous</a>
+                        </li>
+                        <th:block th:each="i:${#numbers.sequence(pageResponseDTO.page_block_start,pageResponseDTO.page_block_end)}">
+                            <li th:class="${pageResponseDTO.getPage() == i} ? 'page-item active' : 'page-item'">
+                                <a th:href="|@{/member/mypage(page=${i})}${pageResponseDTO.linkParams}|" class="page-link" th:data-num="${i}">[[${i}]]</a>
+                            </li>
+                        </th:block>
+                        <li class="page-item" th:if="${pageResponseDTO.next_page_flag}">
+                            <a th:href="|@{/member/mypage(page=${pageResponseDTO.page_block_end +1})}${pageResponseDTO.linkParams}|" class="page-link" th:data-num="${pageResponseDTO.page_block_end+1}">Next</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

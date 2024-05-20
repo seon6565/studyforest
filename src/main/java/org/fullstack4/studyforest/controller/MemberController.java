@@ -12,6 +12,7 @@ import org.fullstack4.studyforest.util.CommonFileUtil;
 import org.fullstack4.studyforest.util.CommonUtil;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -137,7 +138,12 @@ public class MemberController {
     }
 
     @GetMapping("/mypage")
-    public void mypage(){
+    public void mypage(PageRequestDTO pageRequestDTO, Model model,HttpServletRequest request){
+        MemberDTO memberDTO = (MemberDTO) request.getSession().getAttribute("memberDTO");
+        String user_id = memberDTO.getUserId();
+        pageRequestDTO.setCategory("free");
+        PageResponseDTO<BbsDTO> pageResponseDTO = bbsServiceIf.listUserDate(pageRequestDTO,user_id);
+        model.addAttribute("pageResponseDTO" , pageResponseDTO);
     }
 
     @GetMapping("/mybbsview")
@@ -145,8 +151,13 @@ public class MemberController {
         BbsDTO resultbbsDTO = bbsServiceIf.view(bbsDTO);
         List<BbsShareDTO> bbsShareDTOList = bbsServiceIf.listShare(bbsDTO.getBbsIdx());
         MemberDTO memberDTO = (MemberDTO) request.getSession().getAttribute("memberDTO");
+
         BbsFileDTO fileDTO = bbsServiceIf.viewFile(bbsDTO.getBbsIdx());
-        fileDTO.setDirectory(fileDTO.getDirectory().replace("D:\\java4\\studyforest\\studyforest\\src\\main\\resources\\static\\img\\upload","/img/upload/"));
+        if(fileDTO!=null) {
+            fileDTO.setDirectory(fileDTO.getDirectory().replace("D:\\java4\\studyforest\\studyforest\\src\\main\\resources\\static\\img\\upload", "/img/upload/"));
+            model.addAttribute("fileDTO",fileDTO);
+            model.addAttribute("imgsrc",fileDTO.getDirectory()+fileDTO.getFileName());
+        }
         if(memberDTO != null) {
             BbsGoodDTO bbsGoodDTO = BbsGoodDTO.builder().bbsIdx(bbsDTO.getBbsIdx()).userId(memberDTO.getUserId()).build();
             BbsGoodDTO resultDTO = bbsServiceIf.viewGood(bbsGoodDTO);
@@ -155,7 +166,6 @@ public class MemberController {
         model.addAttribute("linkParam","?page="+pageRequestDTO.getPage()+pageRequestDTO.getLinkParams());
         model.addAttribute("bbsShareDTO",bbsShareDTOList);
         model.addAttribute("bbsDTO",resultbbsDTO);
-        model.addAttribute("fileDTO",fileDTO);
     }
 
     @GetMapping("/mybbsregist")
@@ -183,6 +193,7 @@ public class MemberController {
         model.addAttribute("bbsDTO",viewDTO);
         model.addAttribute("fileDTO",fileDTO);
     }
+    @Transactional
     @PostMapping("/mybbsmodify")
     public String modifyPost(BbsDTO bbsDTO, Model model, MultipartHttpServletRequest files){
         bbsServiceIf.modify(bbsDTO);
@@ -191,10 +202,11 @@ public class MemberController {
         List<String> filenames = null;
         filenames = commonFileUtil.fileuploads(files,saveDirectory);;
         if(filenames!=null) {
-            commonFileUtil.fileDelite(bbsFileDTO.getDirectory(),bbsFileDTO.getFileName());
-
-            for (String filename : filenames) {
+            if(bbsFileDTO != null) {
+                commonFileUtil.fileDelite(saveDirectory, bbsFileDTO.getFileName());
                 bbsServiceIf.deleteFile(bbsFileDTO);
+            }
+            for (String filename : filenames) {
                 BbsFileDTO bbsFileDTO2 = BbsFileDTO.builder().bbsIdx(bbsDTO.getBbsIdx()).category(bbsDTO.getCategory()).directory(saveDirectory)
                         .fileName(filename).userId(bbsDTO.getUser_id()).build();
                 bbsServiceIf.registFile(bbsFileDTO2);
@@ -218,6 +230,12 @@ public class MemberController {
         String user_id = memberDTO.getUserId();
         pageRequestDTO.setCategory("free");
         PageResponseDTO<BbsDTO> pageResponseDTO = bbsServiceIf.listUser(pageRequestDTO,user_id);
+        if(pageResponseDTO.getSearch_type()!= null && pageResponseDTO.getSearch_type().contains("t")){
+            model.addAttribute("tflag" , "checked");
+        }
+        if(pageResponseDTO.getSearch_type()!= null && pageResponseDTO.getSearch_type().contains("c")){
+            model.addAttribute("cflag" , "checked");
+        }
         model.addAttribute("pageResponseDTO" , pageResponseDTO);
 
     }

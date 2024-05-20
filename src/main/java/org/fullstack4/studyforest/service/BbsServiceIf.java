@@ -3,6 +3,7 @@ package org.fullstack4.studyforest.service;
 
 import org.fullstack4.studyforest.dto.*;
 
+import java.util.Date;
 import java.util.List;
 
 public interface BbsServiceIf {
@@ -27,5 +28,6 @@ public interface BbsServiceIf {
     int registFile(BbsFileDTO bbsFileDTO);
     void deleteFile(BbsFileDTO bbsFileDTO);
     BbsFileDTO viewFile(int bbsIdx);
+    PageResponseDTO<BbsDTO> listUserDate(PageRequestDTO pageRequestDTO,String user_id);
 
 }

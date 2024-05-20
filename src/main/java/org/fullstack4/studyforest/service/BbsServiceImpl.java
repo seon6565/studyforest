@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -164,6 +165,17 @@ public class BbsServiceImpl implements BbsServiceIf {
     }
 
     @Override
+    public PageResponseDTO<BbsDTO> listUserDate(PageRequestDTO pageRequestDTO, String user_id) {
+        PageRequest pageable = pageRequestDTO.getPageable();
+        Page<BbsFreeEntity> result = bbsFreeRepository.searchUserDateList(pageable,user_id,pageRequestDTO.getReg_date_end());
+        List<BbsDTO> dtoList = result.getContent().stream()
+                .map(board->modelMapper.map(board,BbsDTO.class))
+                .collect(Collectors.toList());
+        return PageResponseDTO.<BbsDTO>withAll().pageRequestDTO(pageRequestDTO)
+                .dtoList(dtoList).total_count((int)result.getTotalElements()).build();
+    }
+
+    @Override
     public List<BbsShareDTO> listShareToUserId(String userId) {
         List<BbsShareEntity> bbsShareEntityList = bbsShareRepository.findAllByToUserId(userId);
         List<BbsShareDTO> bbsShareDTOList = bbsShareEntityList.stream().map(board->modelMapper.map(board,BbsShareDTO.class)).collect(Collectors.toList());
@@ -222,7 +234,10 @@ public class BbsServiceImpl implements BbsServiceIf {
     @Override
     public BbsFileDTO viewFile(int bbsIdx) {
         BbsFileEntity bbsFileEntity = bbsFileRepository.findByBbsIdx(bbsIdx);
-        return modelMapper.map(bbsFileEntity, BbsFileDTO.class);
+        if(bbsFileEntity !=null) {
+            return modelMapper.map(bbsFileEntity, BbsFileDTO.class);
+        }
+        return null;
     }
 
 }

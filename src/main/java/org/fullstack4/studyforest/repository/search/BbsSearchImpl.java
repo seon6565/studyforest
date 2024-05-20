@@ -145,4 +145,29 @@ public class BbsSearchImpl extends QuerydslRepositorySupport implements BbsSearc
         }
         return null;
     }
+
+    @Override
+    public Page<BbsFreeEntity> searchUserDateList(Pageable pageable, String user_id, LocalDate reg_date) {
+        QBbsFreeEntity qBoard = QBbsFreeEntity.bbsFreeEntity;
+        JPQLQuery<BbsFreeEntity> query = from(qBoard);
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        if (user_id != null && user_id.length() > 0) {
+            booleanBuilder.and(qBoard.user_id.eq(user_id));
+        }
+        LocalTime start_time = LocalTime.of(0,0,0);
+        LocalTime end_time = LocalTime.of(23,59,59);
+        if (reg_date != null && reg_date != null) {
+            LocalDateTime reg_start = LocalDateTime.of(reg_date,start_time);
+            LocalDateTime reg_end = LocalDateTime.of(reg_date,end_time);
+            booleanBuilder.and(qBoard.reg_date.between(reg_start,reg_end));
+        }
+        query.where(booleanBuilder);
+        this.getQuerydsl().applyPagination(pageable, query);
+        log.info("keyword query : {}", query);
+        List<BbsFreeEntity> boards = query.fetch();
+        int total = (int) query.fetchCount();
+        log.info("keyword board : " + boards);
+        log.info("keyword total : " + total);
+        return new PageImpl<>(boards,pageable,total);
+    }
 }

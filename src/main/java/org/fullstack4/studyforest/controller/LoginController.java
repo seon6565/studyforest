@@ -207,6 +207,7 @@ public class LoginController {
             memberDTO.setTemp_password(tempPwd);
             memberServiceIf.searchPwd(memberDTO);
             //이메일 전송로직
+            redirectAttributes.addFlashAttribute("info","alert(`임시비밀번호(이메일 전송으로 변경 예정 ="+tempPwd+"`);");
             return "redirect:/modifysearchpwd";
         }else {
             redirectAttributes.addFlashAttribute("info","alert(`해당 ID가 존재하지 않습니다.`);");

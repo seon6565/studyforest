@@ -4,6 +4,8 @@ import org.fullstack4.studyforest.domain.BbsFreeEntity;
 import org.fullstack4.studyforest.repository.search.BbsSearch;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BbsFreeRepository extends JpaRepository<BbsFreeEntity, Integer>, BbsSearch {
+import java.util.Date;
+import java.util.List;
 
+public interface BbsFreeRepository extends JpaRepository<BbsFreeEntity, Integer>, BbsSearch {
 }

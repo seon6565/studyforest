@@ -25,20 +25,21 @@
                             <div class="input-group-text">
                                 <div class="form-check form-switch form-check-inline" >
                                     <label class="form-check-label" for="search_type_0">제목</label>
-                                    <input class="form-check-input" role="switch" type="checkbox" value="t" name="search_type" id="search_type_0" >
+                                    <input class="form-check-input" role="switch" type="checkbox" value="t" name="search_type" id="search_type_0" th:checked="${tflag}" >
                                 </div>
                                 <div class="form-check form-switch form-check-inline" >
-                                    <label class="form-check-label" for="search_type_0">내용</label>
-                                    <input class="form-check-input" role="switch" type="checkbox" value="c" name="search_type" id="search_type_1" >
+                                    <label class="form-check-label" for="search_type_0" >내용</label>
+                                    <input class="form-check-input" role="switch" type="checkbox" value="c" name="search_type" id="search_type_1" th:checked="${cflag}"  >
                                 </div>
                             </div>
                             <input class="form-control" type="text" name="search_word" id="search_word" placeholder="검색어" th:value="${pageResponseDTO.search_word}">
+                            [[${pageResponseDTO.search_word}]]
                         </div>
                         <div class="input-group mb-1">
                             <span class="input-group-text">등록일</span>
-                            <input type="date" class="form-control" name="reg_date_start" id="reg_date_start" placeholder="등록일 시작" >
+                            <input type="date" class="form-control" name="reg_date_start" id="reg_date_start" placeholder="등록일 시작" th:value="${pageResponseDTO.reg_date_start}">
                             <span class="input-group-text">~</span>
-                            <input type="date" class="form-control" name="reg_date_end" id="reg_date_end" placeholder="등록일 끝" >
+                            <input type="date" class="form-control" name="reg_date_end" id="reg_date_end" placeholder="등록일 끝" th:value="${pageResponseDTO.reg_date_end}">
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-1">
                             <button class="btn btn-outline-primary" type="submit">검색</button>

@@ -14,4 +14,5 @@ public interface BbsSearch {
 
     Page<BbsFreeEntity> searchUserList(Pageable pageable, String[] types, String search_keyword, String table, String category, String user_id, String orderby, LocalDate reg_date_start, LocalDate reg_date_end);
 
+    Page<BbsFreeEntity> searchUserDateList(Pageable pageable, String user_id, LocalDate reg_date);
 }

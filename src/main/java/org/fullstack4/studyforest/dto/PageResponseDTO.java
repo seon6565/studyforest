@@ -55,6 +55,9 @@ public class PageResponseDTO<E> {
         this.next_page_flag = (this.total_page >this.page_block_end);
         this.dtoList = dtoList;
         this.orderby = pageRequestDTO.getOrderby();
+        this.search_type = pageRequestDTO.getSearch_type();
+        this.search_types = pageRequestDTO.getSearch_types();
+        this.search_word = pageRequestDTO.getSearch_word();
         this.reg_date_start = pageRequestDTO.getReg_date_start();
         this.reg_date_end = pageRequestDTO.getReg_date_end();
         this.linkParams = pageRequestDTO.getLinkParams();

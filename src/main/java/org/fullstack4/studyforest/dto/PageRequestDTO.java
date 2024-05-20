@@ -44,8 +44,9 @@ public class PageRequestDTO {
     private String category2;
     private String linkParams;
     private String orderby;
-    private LocalDate reg_date_start;
-    private LocalDate reg_date_end;
+    @Builder.Default
+    private LocalDate reg_date_start = LocalDate.now().minusDays(7);
+    private LocalDate reg_date_end= LocalDate.now();
 
     public void setTotal_count(int total_count){this.total_count=total_count; }
     public int getPage_skip_count() {return (this.page-1)*this.page_size; }
