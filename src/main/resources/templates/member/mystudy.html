@@ -72,8 +72,8 @@
                         <th class="col-1 text-truncate">No</th>
                         <th class="col-1 text-truncate">대분류</th>
                         <th class="col-1 text-truncate">중분류</th>
-                        <th class="col-4 text-truncate">제목</th>
-                        <th class="col-1 text-truncate">등록일</th>
+                        <th class="col-3 text-truncate">제목</th>
+                        <th class="col-2 text-truncate">등록일</th>
                         <th class="col-1 text-truncate">좋아요</th>
                         <th class="col-1 text-truncate">노출여부</th>
                         <th class="col-2 text-truncate">노출기간</th>
@@ -84,8 +84,8 @@
                         <td class="col-1 text-truncate" >[[${dto.BbsIdx}]]</td>
                         <th class="col-1 text-truncate">[[${dto.category}]]</th>
                         <th class="col-1 text-truncate">[[${dto.category2}]]</th>
-                        <td class="col-4 text-truncate" ><a th:href="|@{/member/mybbsview(page=${pageResponseDTO.page},bbsIdx=${dto.bbsIdx},category=${dto.category})}${pageResponseDTO.linkParams}|">[[${dto.title}]]</a></td>
-                        <td class="col-1 text-truncate" >[[${#strings.substring(dto.reg_date,0,10)}]]</td>
+                        <td class="col-3 text-truncate" ><a th:href="|@{/member/mybbsview(page=${pageResponseDTO.page},bbsIdx=${dto.bbsIdx},category=${dto.category})}${pageResponseDTO.linkParams}|">[[${dto.title}]]</a></td>
+                        <td class="col-2 text-truncate" >[[${#strings.substring(dto.reg_date,0,10)}]]</td>
                         <td class="col-1 text-truncate" >[[${dto.good}]]</td>
                         <td class="col-1 text-truncate" >[[${dto.display_date_flag}]]</td>
                         <td class="col-2 text-truncate">[[${dto.display_date_start}]] ~ [[${dto.display_date_end}]]</td>

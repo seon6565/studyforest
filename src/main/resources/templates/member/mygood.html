@@ -29,17 +29,17 @@
                     <tr class="table-secondary row">
                         <th class="col-1 text-truncate">No</th>
                         <th class="col-1 text-truncate">카테고리</th>
-                        <th class="col-8 text-truncate">제목</th>
-                        <th class="col-1 text-truncate">등록일</th>
-                        <th class="col-1 text-truncate">좋아요취소</th>
+                        <th class="col-7 text-truncate">제목</th>
+                        <th class="col-2 text-truncate">등록일</th>
+                        <th class="col-1 text-truncate">취소</th>
                     </tr>
                     </thead>
                     <tbody id="tablebody">
                     <tr class="row" th:each="dto:${bbsGoodDTO}">
                         <td class="col-1 text-truncate" >[[${dto.bbsIdx}]]</td>
                         <th class="col-1 text-truncate">[[${dto.category}]]</th>
-                        <td class="col-8 text-truncate" ><a th:href="|@{/member/mybbsview(bbsIdx=${dto.bbsIdx},category=${dto.category})}|">[[${dto.title}]]</a></td>
-                        <td class="col-1 text-truncate" >[[${#strings.substring(dto.reg_date,0,10)}]]</td>
+                        <td class="col-7 text-truncate" ><a th:href="|@{/member/mybbsview(bbsIdx=${dto.bbsIdx},category=${dto.category})}|">[[${dto.title}]]</a></td>
+                        <td class="col-2 text-truncate" >[[${#strings.substring(dto.reg_date,0,10)}]]</td>
                         <td class="col-1 text-truncate" ><a th:href="|@{/member/gooddelete(goodIdx=${dto.goodIdx},bbsIdx=${dto.bbsIdx},category=${dto.category})}|">X</a></td>
                     </tr>
                     </tbody>

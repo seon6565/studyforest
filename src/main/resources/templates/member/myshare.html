@@ -29,10 +29,10 @@
                     <tr class="table-secondary row">
                         <th class="col-1 text-truncate">No</th>
                         <th class="col-1 text-truncate">카테고리</th>
-                        <th class="col-5 text-truncate">제목</th>
+                        <th class="col-4 text-truncate">제목</th>
                         <th class="col-1 text-truncate">공유자</th>
                         <th class="col-2 text-truncate">공유받은사람</th>
-                        <th class="col-1 text-truncate">등록일</th>
+                        <th class="col-2 text-truncate">등록일</th>
                         <th class="col-1 text-truncate">공유취소</th>
                     </tr>
                     </thead>
@@ -40,10 +40,10 @@
                     <tr class="row" th:each="dto:${bbsShareDTO}">
                         <td class="col-1 text-truncate" >[[${dto.bbsIdx}]]</td>
                         <th class="col-1 text-truncate">[[${dto.category}]]</th>
-                        <td class="col-5 text-truncate" ><a th:href="|@{/member/mybbsview(bbsIdx=${dto.bbsIdx},category=${dto.category})}|">[[${dto.title}]]</a></td>
+                        <td class="col-4 text-truncate" ><a th:href="|@{/member/mybbsview(bbsIdx=${dto.bbsIdx},category=${dto.category})}|">[[${dto.title}]]</a></td>
                         <td class="col-1 text-truncate" >[[${dto.userId}]]</td>
                         <td class="col-2 text-truncate" >[[${dto.toUserId}]]</td>
-                        <td class="col-1 text-truncate" >[[${#strings.substring(dto.reg_date,0,10)}]]</td>
+                        <td class="col-2 text-truncate" >[[${#strings.substring(dto.reg_date,0,10)}]]</td>
                         <td class="col-1 text-truncate" ><a th:href="|@{/member/sharedelete(shareIdx=${dto.shareIdx},bbsIdx=${dto.bbsIdx},category=${dto.category})}|">X</a></td>
                     </tr>
                     </tbody>
