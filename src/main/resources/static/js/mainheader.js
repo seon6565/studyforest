@@ -4,7 +4,7 @@ function mainheader(){
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-xxl-6">
                     <div class="text-center my-5">
-                        <h1 class="fw-bolder mb-3">메인 페이지</h1>
+                        <h1 class="fw-bolder mb-3">전체 게시판</h1>
                     </div>
                 </div>
             </div>

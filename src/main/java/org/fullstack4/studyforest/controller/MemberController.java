@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -144,6 +145,7 @@ public class MemberController {
         pageRequestDTO.setCategory("free");
         PageResponseDTO<BbsDTO> pageResponseDTO = bbsServiceIf.listUserDate(pageRequestDTO,user_id);
         model.addAttribute("pageResponseDTO" , pageResponseDTO);
+        model.addAttribute("now" , LocalDate.now());
     }
 
     @GetMapping("/mybbsview")

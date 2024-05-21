@@ -18,7 +18,7 @@
         <div class="card">
             <div class="card-body p-4">
                 <div>
-                    <input type="date" th:value="${pageResponseDTO.reg_date_end}" class="form-control" onchange="window.location.href=`/member/mypage?reg_date_end=${this.value}&page_size=1`">
+                    <input type="date" th:value="${pageResponseDTO.reg_date_end}?${pageResponseDTO.reg_date_end}:${now}" class="form-control" onchange="window.location.href=`/member/mypage?reg_date_end=${this.value}&page_size=1`">
                 </div>
                 <table class="table" >
                     <thead>
